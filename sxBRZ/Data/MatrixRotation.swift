@@ -19,14 +19,11 @@ struct MatrixRotation {
         } else {
             let oldRot = RotationDegree(rawValue: rotDeg.rawValue - 1)!
             let matRot = MatrixRotation.getInstance(oldRot, I, J, N)
-            self.I_old = N - 1 - matRot.I_old
-            self.J_old =         matRot.J_old
+            self.I_old = N - 1 - matRot.J_old
+            self.J_old =         matRot.I_old
         }
     }
 
-    private init(I: UInt, _ J: UInt, _ N: UInt) {
-        self.init(RotationDegree.ROT_0, I, J, N)
-    }
     static func getInstance(rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) -> MatrixRotation {
         let tk = TupleKey(rotDeg, I, J, N)
         if let instance = MatrixRotation.Instances[tk] {
