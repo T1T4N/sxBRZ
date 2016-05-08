@@ -10,8 +10,13 @@ import Foundation
 protocol Scaler {
     static var scale: Int { get }
     static func blendLineShallow(col: UInt32, inout _ out: OutputMatrix)
+    static func blendLineShallow(col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
     static func blendLineSteep(col: UInt32, inout _ out: OutputMatrix)
+    static func blendLineSteep(col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
     static func blendLineSteepAndShallow(col: UInt32, inout _ out:OutputMatrix)
+    static func blendLineSteepAndShallow(col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
     static func blendLineDiagonal(col: UInt32, inout _ out: OutputMatrix)
+    static func blendLineDiagonal(col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
     static func blendCorner(col: UInt32, inout _ out: OutputMatrix)
+    static func blendCorner(col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
 }
