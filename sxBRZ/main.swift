@@ -54,14 +54,15 @@ if let image = NSImage(contentsOfURL: NSURL(fileURLWithPath: inPath)) {
         let rawpt = UnsafeMutablePointer<UInt32>(p_raw)
 
         var p_output = [UInt32](count: scaleFactor * scaleFactor * height * width, repeatedValue: 0)
-        let outpt = UnsafeMutablePointer<UInt32>(p_output)
+        var outpt = UnsafeMutablePointer<UInt32>(p_output)
 
         // p_fin contains the data converted to ARGB
         var p_fin = [UInt32](count: scaleFactor * scaleFactor * height * width, repeatedValue: 0)
         let finpt = UnsafeMutablePointer<UInt32>(p_fin)
 
         var cfg = ScalerCfg()
-        scale(UInt(scaleFactor), rawpt, outpt, width, height, ColorFormat.ARGB, &cfg)
+        scale(UInt(scaleFactor), rawpt, &outpt, width, height, ColorFormat.ARGB, cfg)
+//        scale(UInt(scaleFactor), p_raw, &p_output, width, height, ColorFormat.ARGB, cfg)
 //        xBRZC.scale(scaleFactor, source: rawpt, target: outpt, width: Int32(width), height: Int32(height), hasAlpha: true)
 
         // Convert RGBA to ARGB
