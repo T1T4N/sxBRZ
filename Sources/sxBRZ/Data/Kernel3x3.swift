@@ -8,6 +8,7 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
 struct Kernel3x3 {
     let
     a: UInt32, b: UInt32, c: UInt32,

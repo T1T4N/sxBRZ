@@ -35,6 +35,7 @@
 		E1D28076226A6EBE005343FD /* Kernel3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7A2269E0770004C092 /* Kernel3x3.swift */; };
 		E1D28077226A6EBE005343FD /* OutputMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */; };
 		E1D28079226A6F51005343FD /* sxBRZ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1D28056226A6E52005343FD /* sxBRZ.framework */; };
+		E1D2807E226A7E53005343FD /* Memoize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D2807D226A7E53005343FD /* Memoize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		E1D28056226A6E52005343FD /* sxBRZ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = sxBRZ.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1D28058226A6E52005343FD /* sxBRZ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sxBRZ.h; sourceTree = "<group>"; };
 		E1D28059226A6E52005343FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E1D2807D226A7E53005343FD /* Memoize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memoize.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 			children = (
 				C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */,
 				E1065D7C2269EFCF0004C092 /* Pixels.swift */,
+				E1D2807D226A7E53005343FD /* Memoize.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				E1D28070226A6EBE005343FD /* ScalerCfg.swift in Sources */,
 				E1D28074226A6EBE005343FD /* RotationDegree.swift in Sources */,
 				E1D28065226A6EA7005343FD /* Scaler6x.swift in Sources */,
+				E1D2807E226A7E53005343FD /* Memoize.swift in Sources */,
 				E1D2806D226A6EB8005343FD /* ImageUtils.swift in Sources */,
 				E1D28075226A6EBE005343FD /* Kernel4x4.swift in Sources */,
 				E1D28069226A6EAD005343FD /* DistYCbCrBuffer.swift in Sources */,

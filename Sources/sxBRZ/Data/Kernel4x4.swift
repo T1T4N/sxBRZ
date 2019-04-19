@@ -7,6 +7,7 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
 /// Kernel for the preprocessing step
 struct Kernel4x4 {
     let
