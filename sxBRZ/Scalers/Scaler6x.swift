@@ -7,15 +7,12 @@
 
 import Foundation
 
-struct Scaler6x<T:ColorGradient>: Scaler {
-    static var scale: Int {
-        get {
-            return 6
-        }
-    }
+struct Scaler6x<T: ColorGradient>: Scaler {
+    static var scale: Int { return 6 }
 
-    static func alphaGrad(_ M: UInt32, _ N: UInt32, _ pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
-        T.alphaGrad(M, N, &pixBack[0], pixFront)
+    static func alphaGrad(_ M: UInt32, _ N: UInt32,
+                          _ pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
+        T.instance.alphaGrad(M, N, &pixBack[0], pixFront)
     }
 
     static func blendLineShallow(_ col: UInt32, _ out: inout OutputMatrix) {
@@ -35,24 +32,24 @@ struct Scaler6x<T:ColorGradient>: Scaler {
         out.ref(UInt(scale) - 2, 4)[0] = col
         out.ref(UInt(scale) - 2, 5)[0] = col
     }
+
     static func blendLineShallow(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>) {
         alphaGrad(1, 4, ref(UInt(scale) - 1, 0), col)
         alphaGrad(1, 4, ref(UInt(scale) - 2, 2), col)
         alphaGrad(1, 4, ref(UInt(scale) - 3, 4), col)
-        
+
         alphaGrad(3, 4, ref(UInt(scale) - 1, 1), col)
         alphaGrad(3, 4, ref(UInt(scale) - 2, 3), col)
         alphaGrad(3, 4, ref(UInt(scale) - 3, 5), col)
-        
+
         ref(UInt(scale) - 1, 2)[0] = col
         ref(UInt(scale) - 1, 3)[0] = col
         ref(UInt(scale) - 1, 4)[0] = col
         ref(UInt(scale) - 1, 5)[0] = col
-        
+
         ref(UInt(scale) - 2, 4)[0] = col
         ref(UInt(scale) - 2, 5)[0] = col
     }
-
 
     static func blendLineSteep(_ col: UInt32, _ out: inout OutputMatrix) {
         alphaGrad(1, 4, out.ref(0, UInt(scale) - 1), col)
@@ -71,24 +68,24 @@ struct Scaler6x<T:ColorGradient>: Scaler {
         out.ref(4, UInt(scale) - 2)[0] = col
         out.ref(5, UInt(scale) - 2)[0] = col
     }
+
     static func blendLineSteep(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>) {
         alphaGrad(1, 4, ref(0, UInt(scale) - 1), col)
         alphaGrad(1, 4, ref(2, UInt(scale) - 2), col)
         alphaGrad(1, 4, ref(4, UInt(scale) - 3), col)
-        
+
         alphaGrad(3, 4, ref(1, UInt(scale) - 1), col)
         alphaGrad(3, 4, ref(3, UInt(scale) - 2), col)
         alphaGrad(3, 4, ref(5, UInt(scale) - 3), col)
-        
+
         ref(2, UInt(scale) - 1)[0] = col
         ref(3, UInt(scale) - 1)[0] = col
         ref(4, UInt(scale) - 1)[0] = col
         ref(5, UInt(scale) - 1)[0] = col
-        
+
         ref(4, UInt(scale) - 2)[0] = col
         ref(5, UInt(scale) - 2)[0] = col
     }
-
 
     static func blendLineSteepAndShallow(_ col: UInt32, _ out: inout OutputMatrix) {
         alphaGrad(1, 4, out.ref(0, UInt(scale) - 1), col)
@@ -112,25 +109,26 @@ struct Scaler6x<T:ColorGradient>: Scaler {
         out.ref(UInt(scale) - 1, 2)[0] = col
         out.ref(UInt(scale) - 1, 3)[0] = col
     }
+
     static func blendLineSteepAndShallow(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>) {
         alphaGrad(1, 4, ref(0, UInt(scale) - 1), col)
         alphaGrad(1, 4, ref(2, UInt(scale) - 2), col)
         alphaGrad(3, 4, ref(1, UInt(scale) - 1), col)
         alphaGrad(3, 4, ref(3, UInt(scale) - 2), col)
-        
+
         alphaGrad(1, 4, ref(UInt(scale) - 1, 0), col)
         alphaGrad(1, 4, ref(UInt(scale) - 2, 2), col)
         alphaGrad(3, 4, ref(UInt(scale) - 1, 1), col)
         alphaGrad(3, 4, ref(UInt(scale) - 2, 3), col)
-        
+
         ref(2, UInt(scale) - 1)[0] = col
         ref(3, UInt(scale) - 1)[0] = col
         ref(4, UInt(scale) - 1)[0] = col
         ref(5, UInt(scale) - 1)[0] = col
-        
+
         ref(4, UInt(scale) - 2)[0] = col
         ref(5, UInt(scale) - 2)[0] = col
-        
+
         ref(UInt(scale) - 1, 2)[0] = col
         ref(UInt(scale) - 1, 3)[0] = col
     }
@@ -144,11 +142,12 @@ struct Scaler6x<T:ColorGradient>: Scaler {
         out.ref(UInt(scale) - 1, UInt(scale) - 1)[0] = col
         out.ref(UInt(scale) - 1, UInt(scale) - 2)[0] = col
     }
+
     static func blendLineDiagonal(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>) {
         alphaGrad(1, 2, ref(UInt(scale) - 1, UInt(scale / 2)), col)
         alphaGrad(1, 2, ref(UInt(scale) - 2, UInt(scale / 2) + 1), col)
         alphaGrad(1, 2, ref(UInt(scale) - 3, UInt(scale / 2) + 2), col)
-        
+
         ref(UInt(scale) - 2, UInt(scale) - 1)[0] = col
         ref(UInt(scale) - 1, UInt(scale) - 1)[0] = col
         ref(UInt(scale) - 1, UInt(scale) - 2)[0] = col
@@ -161,6 +160,7 @@ struct Scaler6x<T:ColorGradient>: Scaler {
         alphaGrad(6, 100, out.ref(5, 3), col)  //0.05652034508
         alphaGrad(6, 100, out.ref(3, 5), col)  //0.05652034508
     }
+
     static func blendCorner(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>) {
         alphaGrad(97, 100, ref(5, 5), col)  //exact: 0.9711013910
         alphaGrad(42, 100, ref(4, 5), col)  //0.4236372243

@@ -7,16 +7,13 @@
 
 import Foundation
 
-struct Scaler2x<T:ColorGradient>: Scaler {
-    static var scale: Int {
-        get {
-            return 2
-        }
-    }
+struct Scaler2x<T: ColorGradient>: Scaler {
+    static var scale: Int { return 2 }
 
-    static func alphaGrad(_ M: UInt32, _ N: UInt32, _ pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
+    static func alphaGrad(_ M: UInt32, _ N: UInt32,
+                          _ pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
         let pb = UnsafeMutablePointer<UInt32>(pixBack)
-        T.alphaGrad(M, N, &pb[0], pixFront)
+        T.instance.alphaGrad(M, N, &pb[0], pixFront)
     }
 
     static func blendLineShallow(_ col: UInt32, _ out: inout OutputMatrix) {
