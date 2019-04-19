@@ -12,9 +12,8 @@ struct Scaler2x: Scaler {
     var scale: Int { return 2 }
 
     func alphaGrad(_ M: UInt32, _ N: UInt32,
-                   _ pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
-        let pb = UnsafeMutablePointer<UInt32>(pixBack)
-        gradient.alphaGrad(M, N, &pb[0], pixFront)
+                   _ pixBack: UnsafeMutablePointer<RawPixel>, _ pixFront: RawPixel) {
+        gradient.alphaGrad(M, N, &pixBack[0], pixFront)
     }
 
     func blendLineShallow(_ col: UInt32, _ out: inout OutputMatrix) {
