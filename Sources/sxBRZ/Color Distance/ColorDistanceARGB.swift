@@ -23,7 +23,7 @@ struct ColorDistanceARGB: ColorDistance {
 
         //return std::min(a1, a2) * DistYCbCrBuffer::dist(pix1, pix2) + 255 * abs(a1 - a2);
         //=> following code is 15% faster:
-        let dist = DistYCbCrBuffer.dist(pix1, pix2)
+        let dist = DistYCbCrBuffer.instance.dist(pix1, pix2)
         // let dist = distYCbCr(pix1, pix2, 1.0)
         if a1 < a2 {
             return a1 * dist + 255 * (a2 - a1)
