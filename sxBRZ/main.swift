@@ -47,42 +47,51 @@ let outWidth = scaleFactor * width
 let outHeight = scaleFactor * height
 
 var rawData = getImageData(cgRef)
-let rawpt = UnsafeMutablePointer<UInt32>(mutating: rawData)
+let rawDataPtr = UnsafeMutablePointer<UInt32>(mutating: rawData)
 
-var p_output = [UInt32](repeating: 0, count: scaleFactor * scaleFactor * height * width)
-var outpt = UnsafeMutablePointer<UInt32>(mutating: p_output)
+var outputData = [UInt32](repeating: 0, count: scaleFactor * scaleFactor * height * width)
+var outputDataPtr = UnsafeMutablePointer<UInt32>(mutating: outputData)
 
-// p_fin contains the data converted to ARGB
-var p_fin = [UInt32](repeating: 0, count: scaleFactor * scaleFactor * height * width)
-let finpt = UnsafeMutablePointer<UInt32>(mutating: p_fin)
+// finalData contains the data converted to ARGB
+var finalData = [UInt32](repeating: 0, count: scaleFactor * scaleFactor * height * width)
+let finalDataPtr = UnsafeMutablePointer<UInt32>(mutating: finalData)
 
 var cfg = ScalerCfg()
-scale(UInt(scaleFactor), rawpt, &outpt, width, height, ColorFormat.argb, cfg)
+scale(UInt(scaleFactor), rawDataPtr, &outputDataPtr, width, height, ColorFormat.argb, cfg)
 //scale(UInt(scaleFactor), p_raw, &p_output, width, height, ColorFormat.ARGB, cfg)
 //xBRZC.scale(scaleFactor, source: rawpt, target: outpt, width: Int32(width), height: Int32(height), hasAlpha: true)
 
 // Convert RGBA to ARGB
-outpt.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout.size(ofValue: p_output)) { convpt in
+outputDataPtr.withMemoryRebound(to: UInt8.self,
+                        capacity: MemoryLayout.size(ofValue: outputData)) { convpt in
     for y in 0 ..< outWidth {
         for x in 0 ..< outHeight {
             let offset = 4 * (x * outWidth + y)
-            
+
             let a: UInt32 = UInt32(convpt[offset])
             let r: UInt32 = UInt32(convpt[offset + 1])
             let g: UInt32 = UInt32(convpt[offset + 2])
             let b: UInt32 = UInt32(convpt[offset + 3])
-            
-            finpt[x * outWidth + y] = (a << 24) | (r << 16) | (g << 8) | b
+
+            finalDataPtr[x * outWidth + y] = (a << 24) | (r << 16) | (g << 8) | b
         }
     }
 }
 
 let colorSpace = CGColorSpaceCreateDeviceRGB()
 let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
-let modCont = CGContext(data: UnsafeMutableRawPointer(finpt), width: outWidth, height: outHeight, bitsPerComponent: 8, bytesPerRow: 4 * outWidth, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
-let modRef = modCont?.makeImage()
+let modCont = CGContext(data: UnsafeMutableRawPointer(finalDataPtr),
+                        width: outWidth, height: outHeight,
+                        bitsPerComponent: 8,
+                        bytesPerRow: 4 * outWidth,
+                        space: colorSpace,
+                        bitmapInfo: bitmapInfo.rawValue)
+guard let modRef = modCont?.makeImage() else {
+    print("Failed to get output bitmap data")
+    exit(EXIT_FAILURE)
+}
 
-let imgRep = NSBitmapImageRep(cgImage: modRef!)
+let imgRep = NSBitmapImageRep(cgImage: modRef)
 var data = imgRep.representation(using: NSBitmapImageRep.FileType.bmp, properties: [:])
 
 do {
