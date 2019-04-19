@@ -6,40 +6,20 @@
 import Foundation
 
 // swiftlint:disable identifier_name
-func getByte(_ N: UInt32, val: UInt32) -> CUnsignedChar {
-    return CUnsignedChar((val >> (8 * N)) & 0xff)
-}
-func getAlpha(_ pix: UInt32) -> CUnsignedChar {
-    return getByte(3, val: pix)
-}
-func getRed(_ pix: UInt32) -> CUnsignedChar {
-    return getByte(2, val: pix)
-}
-func getGreen(_ pix: UInt32) -> CUnsignedChar {
-    return getByte(1, val: pix)
-}
-func getBlue(_ pix: UInt32) -> CUnsignedChar {
-    return getByte(0, val: pix)
-}
 
-func makePixel(_ r: CUnsignedChar, _ g: CUnsignedChar, _ b: CUnsignedChar) -> UInt32 {
-    return (UInt32(r) << 16) | (UInt32(g) << 8) | UInt32(b)
-}
-
-func makePixel(_ a: CUnsignedChar, _ r: CUnsignedChar, _ g: CUnsignedChar, _ b: CUnsignedChar) -> UInt32 {
-    return (UInt32(a) << 24) | (UInt32(r) << 16) | (UInt32(g) << 8) | UInt32(b)
-}
-
-func byteAdvance(_ ptr: UnsafeMutablePointer<UInt32>, _ bytes:Int) -> UnsafeMutablePointer<UInt32> {
-    let tmpPtr = UnsafeMutableRawPointer(ptr).assumingMemoryBound(to: CUnsignedChar.self)
-    //let tmpPtr = UnsafeMutablePointer<CUnsignedChar>(ptr)
-    //return UnsafeMutablePointer<UInt32>(tmpPtr + bytes)
-    let ret = tmpPtr + bytes
-    return UnsafeMutableRawPointer(ret).assumingMemoryBound(to: UInt32.self)
+func byteAdvance(_ ptr: UnsafeMutablePointer<RawPixel>, _ bytes: Int)
+    -> UnsafeMutablePointer<RawPixel> {
+        let tmpPtr = UnsafeMutableRawPointer(ptr).assumingMemoryBound(to: CUnsignedChar.self)
+        //let tmpPtr = UnsafeMutablePointer<CUnsignedChar>(ptr)
+        //return UnsafeMutablePointer<UInt32>(tmpPtr + bytes)
+        let ret = tmpPtr + bytes
+        return UnsafeMutableRawPointer(ret).assumingMemoryBound(to: UInt32.self)
 }
 
 // Fill block  with the given color
-func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>, _ pitch:Int, _ col: UInt32, _ blockWidth:Int, _ blockHeight: Int) {
+func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>,
+               _ pitch: Int, _ col: UInt32,
+               _ blockWidth: Int, _ blockHeight: Int) {
     var trgPt = UnsafeMutablePointer<UInt32>(trg)
     for _ in 0..<blockHeight {
         for x in 0..<blockWidth {
@@ -49,14 +29,15 @@ func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>, _ pitch:Int, _ col: UI
         trgPt = byteAdvance(trgPt, pitch)
     }
 }
-func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>, _ pitch:Int, _ col: UInt32, _ n:Int) {
+func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>,
+               _ pitch: Int, _ col: UInt32, _ n: Int) {
     fillBlock(&trg, pitch, col, n, n)
 }
 
 func distRGB(_ pix1: UInt32, _ pix2: UInt32) -> Double {
-    let r_diff = Double(Int(getRed  (pix1)) - Int(getRed  (pix2)))
-    let g_diff = Double(Int(getGreen(pix1)) - Int(getGreen(pix2)))
-    let b_diff = Double(Int(getBlue (pix1)) - Int(getBlue (pix2)))
+    let r_diff = Double(Int(pix1.red) - Int(pix2.red))
+    let g_diff = Double(Int(pix1.green) - Int(pix2.green))
+    let b_diff = Double(Int(pix1.blue) - Int(pix2.blue))
 
     //euclidean RGB distance
     return sqrt(pow(r_diff, 2) + pow(g_diff, 2) + pow(b_diff, 2))
@@ -75,7 +56,7 @@ func preProcessCorners(_ colorDistance: ColorDistance,
         return result
     }
 
-    func dist(_ pix1:UInt32, _ pix2: UInt32) -> Double {
+    func dist(_ pix1: RawPixel, _ pix2: RawPixel) -> Double {
         return colorDistance.dist(pix1, pix2, cfg.luminanceWeight)
     }
 
@@ -85,7 +66,7 @@ func preProcessCorners(_ colorDistance: ColorDistance,
 
     //test sample: 70% of values max(jg, fk) / min(jg, fk) are between 1.1 and 3.7 with median being 1.8
     if jg < fk {
-        let dominantGradient:Bool = cfg.dominantDirectionThreshold * jg < fk
+        let dominantGradient: Bool = cfg.dominantDirectionThreshold * jg < fk
         if ker.f != ker.g && ker.f != ker.j {
             result.blendF = dominantGradient ? BlendType.dominant : BlendType.normal
         }
@@ -93,7 +74,7 @@ func preProcessCorners(_ colorDistance: ColorDistance,
             result.blendK = dominantGradient ? BlendType.dominant : BlendType.normal
         }
     } else if fk < jg {
-        let dominantGradient:Bool = cfg.dominantDirectionThreshold * fk < jg
+        let dominantGradient: Bool = cfg.dominantDirectionThreshold * fk < jg
         if ker.j != ker.f && ker.j != ker.k {
             result.blendJ = dominantGradient ? BlendType.dominant : BlendType.normal
         }
@@ -104,153 +85,60 @@ func preProcessCorners(_ colorDistance: ColorDistance,
     return result
 }
 
-//template <RotationDegree rotDeg> uint32_t inline get_##x(const Kernel_3x3& ker) { return ker.x; }
-func get_a(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.a
-    case .rot90:
-        return ker.g
-    case .rot180:
-        return ker.i
-    case .rot270:
-        return ker.c
-    }
-}
-func get_b(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.b
-    case .rot90:
-        return ker.d
-    case .rot180:
-        return ker.h
-    case .rot270:
-        return ker.f
-    }
-}
-func get_c(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.c
-    case .rot90:
-        return ker.a
-    case .rot180:
-        return ker.g
-    case .rot270:
-        return ker.i
-    }
-}
-func get_d(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.d
-    case .rot90:
-        return ker.h
-    case .rot180:
-        return ker.f
-    case .rot270:
-        return ker.b
-    }
+func getTopL(_ b: RawPixelColor) -> BlendType {
+    return BlendType(rawValue: ((0x3 & b) % 3))!
 }
 
-func get_e(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 { return ker.e }
-
-func get_f(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.f
-    case .rot90:
-        return ker.b
-    case .rot180:
-        return ker.d
-    case .rot270:
-        return ker.h
-    }
-}
-func get_g(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.g
-    case .rot90:
-        return ker.i
-    case .rot180:
-        return ker.c
-    case .rot270:
-        return ker.a
-    }
-}
-func get_h(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.h
-    case .rot90:
-        return ker.f
-    case .rot180:
-        return ker.b
-    case .rot270:
-        return ker.d
-    }
-}
-func get_i(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
-    switch rotDeg {
-    case .zero:
-        return ker.i
-    case .rot90:
-        return ker.c
-    case .rot180:
-        return ker.a
-    case .rot270:
-        return ker.g
-    }
+func getTopR(_ b: RawPixelColor) -> BlendType {
+    return BlendType(rawValue: ((0x3 & (b >> 2)) % 3))!
 }
 
-func getTopL   (_ b:CUnsignedChar) -> BlendType { return BlendType(rawValue: ((0x3 & b)%3))! }
-func getTopR   (_ b:CUnsignedChar) -> BlendType { return BlendType(rawValue: ((0x3 & (b >> 2))%3))! }
-func getBottomR   (_ b:CUnsignedChar) -> BlendType { return BlendType(rawValue: ((0x3 & (b >> 4))%3))! }
-func getBottomL   (_ b:CUnsignedChar) -> BlendType { return BlendType(rawValue: ((0x3 & (b >> 6))%3))! }
+func getBottomR(_ b: RawPixelColor) -> BlendType {
+    return BlendType(rawValue: ((0x3 & (b >> 4)) % 3))!
+}
+
+func getBottomL(_ b: RawPixelColor) -> BlendType {
+    return BlendType(rawValue: ((0x3 & (b >> 6)) % 3))!
+}
 
 //buffer is assumed to be initialized before preprocessing!
-func setTopL (_ b:inout CUnsignedChar, _ bt:BlendType) { b |= bt.rawValue }
-//func setTopL (b:UnsafeMutablePointer<CUnsignedChar>, _ idx:Int, _ bt:BlendType) {
-//    let bPt = UnsafeMutablePointer<CUnsignedChar>(b)
-//    bPt[idx] |= bt.rawValue
-//}
-func setTopL (_ b:inout [CUnsignedChar], _ idx:Int, _ bt:BlendType) {
+func setTopL(_ b: inout RawPixelColor, _ bt: BlendType) {
+    b |= bt.rawValue
+}
+
+func setTopL(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
     b[idx] |= bt.rawValue
 }
 
-func setTopR (_ b:inout CUnsignedChar, _ bt:BlendType) { b |= (bt.rawValue << 2) }
-//func setTopR (b:UnsafeMutablePointer<CUnsignedChar>, _ idx:Int, _ bt:BlendType) {
-//    let bPt = UnsafeMutablePointer<CUnsignedChar>(b)
-//    bPt[idx] |= (bt.rawValue << 2)
-//}
-func setTopR (_ b:inout [CUnsignedChar], _ idx:Int, _ bt:BlendType) {
+func setTopR(_ b: inout RawPixelColor, _ bt: BlendType) {
+    b |= (bt.rawValue << 2)
+}
+
+func setTopR(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
     b[idx] |= (bt.rawValue << 2)
 }
 
+func setBottomR(_ b: inout RawPixelColor, _ bt: BlendType) {
+    b |= (bt.rawValue << 4)
+}
 
-func setBottomR (_ b:inout CUnsignedChar, _ bt:BlendType) { b |= (bt.rawValue << 4) }
-//func setBottomR (b:UnsafeMutablePointer<CUnsignedChar>, _ idx:Int, _ bt:BlendType) {
-//    let bPt = UnsafeMutablePointer<CUnsignedChar>(b)
-//    bPt[idx] |= (bt.rawValue << 4)
-//}
-func setBottomR (_ b:inout [CUnsignedChar], _ idx:Int, _ bt:BlendType) {
+func setBottomR(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
     b[idx] |= (bt.rawValue << 4)
 }
 
-func setBottomL (_ b:inout CUnsignedChar, _ bt:BlendType) { b |= (bt.rawValue << 6) }
-//func setBottomL (b:UnsafeMutablePointer<CUnsignedChar>, _ idx:Int, _ bt:BlendType) {
-//    let bPt = UnsafeMutablePointer<CUnsignedChar>(b)
-//    bPt[idx] |= (bt.rawValue << 6)
-//}
-func setBottomL (_ b:inout [CUnsignedChar], _ idx:Int, _ bt:BlendType) {
+func setBottomL(_ b: inout RawPixelColor, _ bt: BlendType) {
+    b |= (bt.rawValue << 6)
+}
+
+func setBottomL(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
     b[idx] |= (bt.rawValue << 6)
 }
 
-func blendingNeeded(_ b:CUnsignedChar) -> Bool { return b != 0 }
+func blendingNeeded(_ b: RawPixelColor) -> Bool {
+    return b != 0
+}
 
-func rotateBlendInfo(_ rotDeg:RotationDegree, _ b:CUnsignedChar) -> CUnsignedChar {
+func rotateBlendInfo(_ rotDeg:RotationDegree, _ b: RawPixelColor) -> RawPixelColor {
     switch rotDeg {
     case .zero:
         return b
@@ -271,21 +159,10 @@ func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
                 _ ker: Kernel_3x3,
-                _ targetPt: inout UnsafeMutablePointer<UInt32>,
+                _ target: inout UnsafeMutablePointer<UInt32>,
                 _ trgWidth: Int,
                 _ blendInfo: CUnsignedChar,
                 _ cfg: ScalerCfg) {
-    //    var a = get_a(rotDeg, &ker)
-    //    var b = get_b(rotDeg, &ker)
-    //    var c = get_c(rotDeg, &ker)
-    //    var d = get_d(rotDeg, &ker)
-    //    var e = get_e(rotDeg, &ker)
-    //    var f = get_f(rotDeg, &ker)
-    //    var g = get_g(rotDeg, &ker)
-    //    var h = get_h(rotDeg, &ker)
-    //    var i = get_i(rotDeg, &ker)
-    var target = UnsafeMutablePointer<UInt32>(targetPt)
-    
     var blend = rotateBlendInfo(rotDeg, blendInfo)
     if getBottomR(blend).rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
@@ -301,60 +178,61 @@ func blendPixel(_ scaler: Scaler,
             }
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
             if getTopR(blend) != BlendType.none &&
-                !eq(get_e(rotDeg, ker),
-                    get_g(rotDeg, ker)) {
+                !eq(rotDeg.getE(for: ker),
+                    rotDeg.getG(for: ker)) {
                 return false
             }
             if getBottomL(blend) != BlendType.none &&
-                !eq(get_e(rotDeg, ker),
-                    get_c(rotDeg, ker)) {
+                !eq(rotDeg.getE(for: ker),
+                    rotDeg.getC(for: ker)) {
                 return false
             }
 
             //no full blending for L-shapes; blend corner only (handles "mario mushroom eyes")
-            if !eq(get_e(rotDeg, ker),
-                   get_i(rotDeg, ker)) &&
-                eq(get_g(rotDeg, ker),
-                   get_h(rotDeg, ker)) &&
-                eq(get_h(rotDeg, ker),
-                   get_i(rotDeg, ker)) &&
-                eq(get_i(rotDeg, ker),
-                   get_f(rotDeg, ker)) &&
-                eq(get_f(rotDeg, ker),
-                   get_c(rotDeg, ker)) {
+            if !eq(rotDeg.getE(for: ker),
+                   rotDeg.getI(for: ker)) &&
+                eq(rotDeg.getG(for: ker),
+                   rotDeg.getH(for: ker)) &&
+                eq(rotDeg.getH(for: ker),
+                   rotDeg.getI(for: ker)) &&
+                eq(rotDeg.getI(for: ker),
+                   rotDeg.getF(for: ker)) &&
+                eq(rotDeg.getF(for: ker),
+                   rotDeg.getC(for: ker)) {
                 return false
             }
             return true
         }()
 
         //choose most similar color
-        let px:UInt32 = dist(get_e(rotDeg, ker), get_f(rotDeg, ker)) <= dist(get_e(rotDeg, ker), get_h(rotDeg, ker)) ? get_f(rotDeg, ker) : get_h(rotDeg, ker)
+        let px: UInt32 = dist(rotDeg.getE(for: ker), rotDeg.getF(for: ker)) <= dist(rotDeg.getE(for: ker), rotDeg.getH(for: ker)) ?
+            rotDeg.getF(for: ker) : rotDeg.getH(for: ker)
         
         //        var out = OutputMatrix(UInt(scaler.scale), rotDeg, &target, trgWidth)
         if doLineBlend {
-            let fg = dist(get_f(rotDeg, ker), get_g(rotDeg, ker))
-            let hc = dist(get_h(rotDeg, ker), get_c(rotDeg, ker))
-            let haveShallowLine:Bool = cfg.steepDirectionThreshold * fg <= hc && get_e(rotDeg, ker) != get_g(rotDeg, ker) && get_d(rotDeg, ker) != get_g(rotDeg, ker)
-            let haveSteepLine:Bool   = cfg.steepDirectionThreshold * hc <= fg && get_e(rotDeg, ker) != get_c(rotDeg, ker) && get_b(rotDeg, ker) != get_c(rotDeg, ker)
+            let fg = dist(rotDeg.getF(for: ker), rotDeg.getG(for: ker))
+            let hc = dist(rotDeg.getH(for: ker), rotDeg.getC(for: ker))
+            let haveShallowLine: Bool = cfg.steepDirectionThreshold * fg <= hc &&
+                rotDeg.getE(for: ker) != rotDeg.getG(for: ker) &&
+                rotDeg.getD(for: ker) != rotDeg.getG(for: ker)
+            let haveSteepLine: Bool   = cfg.steepDirectionThreshold * hc <= fg &&
+                rotDeg.getE(for: ker) != rotDeg.getC(for: ker) &&
+                rotDeg.getB(for: ker) != rotDeg.getC(for: ker)
 
             if haveShallowLine {
                 if haveSteepLine {
                     scaler.blendLineSteepAndShallow(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target, trgWidth))
-                }
-                else {
+                } else {
                     scaler.blendLineShallow(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target, trgWidth))
                 }
-            }
-            else {
+            } else {
                 if haveSteepLine {
                     scaler.blendLineSteep(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target, trgWidth))
-                }
-                else {
+                } else {
                     scaler.blendLineDiagonal(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target, trgWidth))
                 }
             }
-        }
-        else {
+        } else {
             scaler.blendCorner(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target, trgWidth))
         }
     }
@@ -369,16 +247,6 @@ func blendPixel(_ scaler: Scaler,
                 _ trgWidth: Int,
                 _ blendInfo: CUnsignedChar,
                 _ cfg: ScalerCfg) {
-    //    var a = get_a(rotDeg, &ker)
-    //    var b = get_b(rotDeg, &ker)
-    //    var c = get_c(rotDeg, &ker)
-    //    var d = get_d(rotDeg, &ker)
-    //    var e = get_e(rotDeg, &ker)
-    //    var f = get_f(rotDeg, &ker)
-    //    var g = get_g(rotDeg, &ker)
-    //    var h = get_h(rotDeg, &ker)
-    //    var i = get_i(rotDeg, &ker)
-
     var blend = rotateBlendInfo(rotDeg, blendInfo)
     if getBottomR(blend).rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
@@ -394,60 +262,57 @@ func blendPixel(_ scaler: Scaler,
             }
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
             if getTopR(blend) != BlendType.none &&
-                !eq(get_e(rotDeg, ker),
-                    get_g(rotDeg, ker)) {
+                !eq(rotDeg.getE(for: ker),
+                    rotDeg.getG(for: ker)) {
                 return false
             }
             if getBottomL(blend) != BlendType.none &&
-                !eq(get_e(rotDeg, ker),
-                    get_c(rotDeg, ker)) {
+                !eq(rotDeg.getE(for: ker),
+                    rotDeg.getC(for: ker)) {
                 return false
             }
             
             //no full blending for L-shapes; blend corner only (handles "mario mushroom eyes")
-            if !eq(get_e(rotDeg, ker),
-                   get_i(rotDeg, ker)) &&
-                eq(get_g(rotDeg, ker),
-                   get_h(rotDeg, ker)) &&
-                eq(get_h(rotDeg, ker),
-                   get_i(rotDeg, ker)) &&
-                eq(get_i(rotDeg, ker),
-                   get_f(rotDeg, ker)) &&
-                eq(get_f(rotDeg, ker),
-                   get_c(rotDeg, ker)) {
+            if !eq(rotDeg.getE(for: ker),
+                   rotDeg.getI(for: ker)) &&
+                eq(rotDeg.getG(for: ker),
+                   rotDeg.getH(for: ker)) &&
+                eq(rotDeg.getH(for: ker),
+                   rotDeg.getI(for: ker)) &&
+                eq(rotDeg.getI(for: ker),
+                   rotDeg.getF(for: ker)) &&
+                eq(rotDeg.getF(for: ker),
+                   rotDeg.getC(for: ker)) {
                 return false
             }
             return true
         }()
-        
+
         //choose most similar color
-        let px:UInt32 = dist(get_e(rotDeg, ker), get_f(rotDeg, ker)) <= dist(get_e(rotDeg, ker), get_h(rotDeg, ker)) ? get_f(rotDeg, ker) : get_h(rotDeg, ker)
-        
+        let px: UInt32 = dist(rotDeg.getE(for: ker), rotDeg.getF(for: ker)) <= dist(rotDeg.getE(for: ker), rotDeg.getH(for: ker)) ?
+            rotDeg.getF(for: ker) : rotDeg.getH(for: ker)
+
         //        var out = OutputMatrix(UInt(scaler.scale), rotDeg, out: &target, currentOffset, trgWidth)
         if doLineBlend {
-            let fg:Double = dist(get_f(rotDeg, ker), get_g(rotDeg, ker))
-            let hc:Double = dist(get_h(rotDeg, ker), get_c(rotDeg, ker))
-            let haveShallowLine:Bool = cfg.steepDirectionThreshold * fg <= hc && get_e(rotDeg, ker) != get_g(rotDeg, ker) && get_d(rotDeg, ker) != get_g(rotDeg, ker)
-            let haveSteepLine:Bool   = cfg.steepDirectionThreshold * hc <= fg && get_e(rotDeg, ker) != get_c(rotDeg, ker) && get_b(rotDeg, ker) != get_c(rotDeg, ker)
+            let fg = dist(rotDeg.getF(for: ker), rotDeg.getG(for: ker))
+            let hc = dist(rotDeg.getH(for: ker), rotDeg.getC(for: ker))
+            let haveShallowLine = cfg.steepDirectionThreshold * fg <= hc && rotDeg.getE(for: ker) != rotDeg.getG(for: ker) && rotDeg.getD(for: ker) != rotDeg.getG(for: ker)
+            let haveSteepLine   = cfg.steepDirectionThreshold * hc <= fg && rotDeg.getE(for: ker) != rotDeg.getC(for: ker) && rotDeg.getB(for: ker) != rotDeg.getC(for: ker)
             
             if haveShallowLine {
                 if haveSteepLine {
                     scaler.blendLineSteepAndShallow(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target, currentOffset, trgWidth))
-                }
-                else {
+                } else {
                     scaler.blendLineShallow(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target,currentOffset,  trgWidth))
                 }
-            }
-            else {
+            } else {
                 if haveSteepLine {
                     scaler.blendLineSteep(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target,currentOffset,  trgWidth))
-                }
-                else {
+                } else {
                     scaler.blendLineDiagonal(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target,currentOffset,  trgWidth))
                 }
             }
-        }
-        else {
+        } else {
             scaler.blendCorner(px, OutputMatrix.ref(UInt(scaler.scale), rotDeg, target,currentOffset,  trgWidth))
         }
     }

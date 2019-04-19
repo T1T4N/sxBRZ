@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		C8D2B006DB24F87845062688 /* BlendType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */; };
 		C8D2B01CE17DE8969F8FF272 /* DistYCbCrBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B7406BE8CD34DFB3DBB8 /* DistYCbCrBuffer.swift */; };
-		C8D2B06A977CB3215F1EAF55 /* xbrz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BD75057DD131A172F980 /* xbrz.cpp */; };
 		C8D2B0A993E951ED8F452C5E /* Kernel4.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5071D5228AE7492AC50 /* Kernel4.swift */; };
 		C8D2B22B9E40501DE7F6DBA2 /* ScalerCfg.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8093CE729318EE91FDB /* ScalerCfg.swift */; };
 		C8D2B2736F841BB3125BA0E5 /* MatrixRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */; };
@@ -32,8 +31,8 @@
 		C8D2BE051EACC00275F8A7B2 /* ColorGradientARGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */; };
 		C8D2BE38A429FBC24140023D /* ColorDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BED1545E5085B6E4AA83 /* ColorDistance.swift */; };
 		C8D2BF304BE85986FF03C9F8 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */; };
-		C8D2BF6B648285BF6BDCCB1A /* ObjCtoCPP.mm in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B01137EE518A1F089C57 /* ObjCtoCPP.mm */; };
 		E1065D7B2269E0770004C092 /* Kernel3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7A2269E0770004C092 /* Kernel3.swift */; };
+		E1065D7D2269EFCF0004C092 /* Pixels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7C2269EFCF0004C092 /* Pixels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,14 +48,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C8D2B01137EE518A1F089C57 /* ObjCtoCPP.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCtoCPP.mm; sourceTree = "<group>"; };
 		C8D2B0B101280A2A12D7A33B /* xBRZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = xBRZ.swift; sourceTree = "<group>"; };
-		C8D2B0D770FB629DE588947E /* xbrz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xbrz.h; sourceTree = "<group>"; };
 		C8D2B127043753B5F3DD733A /* ColorGradientRGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradientRGB.swift; sourceTree = "<group>"; };
 		C8D2B3194D17D6D4E8E3BE45 /* sxBRZ-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sxBRZ-Bridging-Header.h"; sourceTree = "<group>"; };
 		C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutputMatrix.swift; sourceTree = "<group>"; };
 		C8D2B391CFB88D60024FE596 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		C8D2B3F748C7D4A031BBEB5C /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		C8D2B44044436800D21D742C /* Scaler3x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler3x.swift; sourceTree = "<group>"; };
 		C8D2B4468A1C95F43E71139F /* Scaler5x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler5x.swift; sourceTree = "<group>"; };
 		C8D2B5071D5228AE7492AC50 /* Kernel4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel4.swift; sourceTree = "<group>"; };
@@ -72,15 +68,14 @@
 		C8D2BA61ACFC9C31D14ABF85 /* ColorDistanceARGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorDistanceARGB.swift; sourceTree = "<group>"; };
 		C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixRotation.swift; sourceTree = "<group>"; };
 		C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
-		C8D2BD75057DD131A172F980 /* xbrz.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xbrz.cpp; sourceTree = "<group>"; };
 		C8D2BD8E58106D4451A7462B /* sxBRZ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sxBRZ; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D2BEB9750EAE1D49532F1F /* BlendResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendResult.swift; sourceTree = "<group>"; };
 		C8D2BED1545E5085B6E4AA83 /* ColorDistance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorDistance.swift; sourceTree = "<group>"; };
-		C8D2BF0E0DA614DFC402022F /* ObjCtoCPP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCtoCPP.h; sourceTree = "<group>"; };
 		C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradientARGB.swift; sourceTree = "<group>"; };
 		C8D2BF725F319E6009655460 /* ColorFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorFormat.swift; sourceTree = "<group>"; };
 		C8D2BFA90B841DD60C8BE9F3 /* Scaler6x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler6x.swift; sourceTree = "<group>"; };
 		E1065D7A2269E0770004C092 /* Kernel3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kernel3.swift; sourceTree = "<group>"; };
+		E1065D7C2269EFCF0004C092 /* Pixels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pixels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,11 +92,6 @@
 		C8D2B0EF0BC95B18BD708532 /* CPP */ = {
 			isa = PBXGroup;
 			children = (
-				C8D2B3F748C7D4A031BBEB5C /* config.h */,
-				C8D2BF0E0DA614DFC402022F /* ObjCtoCPP.h */,
-				C8D2B01137EE518A1F089C57 /* ObjCtoCPP.mm */,
-				C8D2BD75057DD131A172F980 /* xbrz.cpp */,
-				C8D2B0D770FB629DE588947E /* xbrz.h */,
 			);
 			path = CPP;
 			sourceTree = "<group>";
@@ -110,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */,
+				E1065D7C2269EFCF0004C092 /* Pixels.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -268,7 +259,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "swiftlint || true\n";
+			shellScript = "# swiftlint || true\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -285,10 +276,9 @@
 				C8D2B781A83941C76807443C /* Scaler4x.swift in Sources */,
 				C8D2B65986F50591C800CC7A /* Scaler5x.swift in Sources */,
 				C8D2B520B303237A157804E2 /* Scaler6x.swift in Sources */,
-				C8D2BF6B648285BF6BDCCB1A /* ObjCtoCPP.mm in Sources */,
-				C8D2B06A977CB3215F1EAF55 /* xbrz.cpp in Sources */,
 				C8D2BE38A429FBC24140023D /* ColorDistance.swift in Sources */,
 				C8D2BDC6318A07A661065BFA /* ColorDistanceRGB.swift in Sources */,
+				E1065D7D2269EFCF0004C092 /* Pixels.swift in Sources */,
 				C8D2BDE61366DFFD80FEF70D /* ColorDistanceARGB.swift in Sources */,
 				C8D2B3D1F69A0AFF097CB271 /* ColorGradient.swift in Sources */,
 				C8D2B01CE17DE8969F8FF272 /* DistYCbCrBuffer.swift in Sources */,

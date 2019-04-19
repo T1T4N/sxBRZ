@@ -10,9 +10,9 @@ import Foundation
 struct ColorDistanceARGB: ColorDistance {
     static let instance: ColorDistance = ColorDistanceARGB()
 
-    func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double {
-        let a1 = Double(getAlpha(pix1)) / 255.0
-        let a2 = Double(getAlpha(pix2)) / 255.0
+    func dist(_ pix1: RawPixel, _ pix2: RawPixel, _ luminanceWeight: Double) -> Double {
+        let a1 = Double(pix1.alpha) / 255.0
+        let a2 = Double(pix2.alpha) / 255.0
         /*
          Requirements for a color distance handling alpha channel: with a1, a2 in [0, 1]
 

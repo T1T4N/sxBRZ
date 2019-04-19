@@ -82,7 +82,7 @@ func manipulatePixel(_ imageRef: CGImage) -> CGImage? {
     return imageRef
 }
 
-func getImageData(_ imageRef: CGImage) -> [UInt32] {
+func getPixelData(_ imageRef: CGImage) -> [UInt32] {
     let context = createARGBBitmapContext(imageRef)
     let width = imageRef.width
     let height = imageRef.height
@@ -110,4 +110,10 @@ func getImageData(_ imageRef: CGImage) -> [UInt32] {
     }
     free(data)
     return ret
+}
+
+extension CGImage {
+    func pixelData() -> [RawPixel] {
+        return getPixelData(self)
+    }
 }

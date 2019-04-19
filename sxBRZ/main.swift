@@ -46,15 +46,15 @@ let height = cgRef.height
 let outWidth = scaleFactor * width
 let outHeight = scaleFactor * height
 
-var rawData = getImageData(cgRef)
-let rawDataPtr = UnsafeMutablePointer<UInt32>(mutating: rawData)
+var rawData = getPixelData(cgRef)
+let rawDataPtr = UnsafeMutablePointer<RawPixel>(mutating: rawData)
 
-var outputData = [UInt32](repeating: 0, count: scaleFactor * scaleFactor * height * width)
-var outputDataPtr = UnsafeMutablePointer<UInt32>(mutating: outputData)
+var outputData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * height * width)
+var outputDataPtr = UnsafeMutablePointer<RawPixel>(mutating: outputData)
 
 // finalData contains the data converted to ARGB
-var finalData = [UInt32](repeating: 0, count: scaleFactor * scaleFactor * height * width)
-let finalDataPtr = UnsafeMutablePointer<UInt32>(mutating: finalData)
+var finalData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * height * width)
+let finalDataPtr = UnsafeMutablePointer<RawPixel>(mutating: finalData)
 
 var cfg = ScalerCfg()
 scale(UInt(scaleFactor), rawDataPtr, &outputDataPtr, width, height, ColorFormat.argb, cfg)
@@ -62,16 +62,15 @@ scale(UInt(scaleFactor), rawDataPtr, &outputDataPtr, width, height, ColorFormat.
 //xBRZC.scale(scaleFactor, source: rawpt, target: outpt, width: Int32(width), height: Int32(height), hasAlpha: true)
 
 // Convert RGBA to ARGB
-outputDataPtr.withMemoryRebound(to: UInt8.self,
-                        capacity: MemoryLayout.size(ofValue: outputData)) { convpt in
+outputDataPtr.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout.size(ofValue: outputData)) { convpt in
     for y in 0 ..< outWidth {
         for x in 0 ..< outHeight {
             let offset = 4 * (x * outWidth + y)
 
-            let a: UInt32 = UInt32(convpt[offset])
-            let r: UInt32 = UInt32(convpt[offset + 1])
-            let g: UInt32 = UInt32(convpt[offset + 2])
-            let b: UInt32 = UInt32(convpt[offset + 3])
+            let a = RawPixel(convpt[offset])
+            let r = RawPixel(convpt[offset + 1])
+            let g = RawPixel(convpt[offset + 2])
+            let b = RawPixel(convpt[offset + 3])
 
             finalDataPtr[x * outWidth + y] = (a << 24) | (r << 16) | (g << 8) | b
         }

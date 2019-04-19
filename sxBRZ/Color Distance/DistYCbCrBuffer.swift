@@ -11,9 +11,9 @@ func distYCbCr(_ pix1: UInt32, _ pix2: UInt32, _ lumaWeight: Double = 1.0) -> Do
 {
     //http://en.wikipedia.org/wiki/YCbCr#ITU-R_BT.601_conversion
     //YCbCr conversion is a matrix multiplication => take advantage of linearity by subtracting first!
-    let r_diff = Int(getRed  (pix1)) - Int(getRed  (pix2)) //we may delay division by 255 to after matrix multiplication
-    let g_diff = Int(getGreen(pix1)) - Int(getGreen(pix2)) //
-    let b_diff = Int(getBlue (pix1)) - Int(getBlue (pix2)) //substraction for int is noticeable faster than for double!
+    let r_diff = Int(pix1.red) - Int(pix2.red) //we may delay division by 255 to after matrix multiplication
+    let g_diff = Int(pix1.green) - Int(pix2.green) //
+    let b_diff = Int(pix1.blue) - Int(pix2.blue) //substraction for int is noticeable faster than for double!
 
     //const double k_b = 0.0722; //ITU-R BT.709 conversion
     //const double k_r = 0.2126; //
@@ -64,9 +64,9 @@ struct DistYCbCrBuffer {
         //if (pix1 > pix2)
         //	  std::swap(pix1, pix2); -> 30% perf degradation!!!
         
-        let r_diff = Int(getRed  (pix1)) - Int(getRed  (pix2))
-        let g_diff = Int(getGreen(pix1)) - Int(getGreen(pix2))
-        let b_diff = Int(getBlue (pix1)) - Int(getBlue (pix2))
+        let r_diff = Int(pix1.red) - Int(pix2.red)
+        let g_diff = Int(pix1.green) - Int(pix2.green)
+        let b_diff = Int(pix1.blue) - Int(pix2.blue)
         let buff_idx =
             (((r_diff + 255) / 2) << 16) | (((g_diff + 255) / 2) <<  8) | (( b_diff + 255) / 2)
 

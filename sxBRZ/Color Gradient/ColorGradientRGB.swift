@@ -35,9 +35,9 @@ func gradientRGB(_ M: UInt32, _ N: UInt32,
         return CUnsignedChar((UInt32(colFront) * M + UInt32(colBack) * (N - M)) / N)
     }
 
-    return makePixel(
-        calcColor(getRed  (pixFront), getRed  (pixBack)),
-        calcColor(getGreen(pixFront), getGreen(pixBack)),
-        calcColor(getBlue (pixFront), getBlue (pixBack))
+    return RawPixel.from(
+        r: calcColor(pixFront.red, pixBack.red),
+        g: calcColor(pixFront.green, pixBack.green),
+        b: calcColor(pixFront.blue, pixBack.blue)
     )
 }

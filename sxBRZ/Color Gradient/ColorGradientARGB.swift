@@ -27,22 +27,22 @@ struct ColorGradientARGB: ColorGradient {
 }
 
 func gradientARGB(_ M: UInt32, _ N: UInt32,
-                  _ pixFront: UInt32, _ pixBack: UInt32) -> UInt32 {
+                  _ pixFront: RawPixel, _ pixBack: RawPixel) -> UInt32 {
     assert(0 < M && M < N && N <= 1000, "")
 
-    let weightFront = UInt32(getAlpha(pixFront)) * M
-    let weightBack = UInt32(getAlpha(pixBack)) * (N - M)
+    let weightFront = UInt32(pixFront.alpha) * M
+    let weightBack = UInt32(pixBack.alpha) * (N - M)
     let weightSum = weightFront + weightBack
     guard weightSum != 0 else { return 0 }
 
-    func calcColor(_ colFront: CUnsignedChar, _ colBack: CUnsignedChar) -> CUnsignedChar {
-        return CUnsignedChar((UInt32(colFront) * weightFront + UInt32(colBack) * weightBack) / weightSum)
+    func calcColor(_ colFront: RawPixelColor, _ colBack: RawPixelColor) -> RawPixelColor {
+        return RawPixelColor((RawPixel(colFront) * weightFront + RawPixel(colBack) * weightBack) / weightSum)
     }
 
-    return makePixel(
-        CUnsignedChar(weightSum / N),
-        calcColor(getRed  (pixFront), getRed  (pixBack)),
-        calcColor(getGreen(pixFront), getGreen(pixBack)),
-        calcColor(getBlue (pixFront), getBlue (pixBack))
+    return RawPixel.from(
+        a: RawPixelColor(weightSum / N),
+        r: calcColor(pixFront.red, pixBack.red),
+        g: calcColor(pixFront.green, pixBack.green),
+        b: calcColor(pixFront.blue, pixBack.blue)
     )
 }
