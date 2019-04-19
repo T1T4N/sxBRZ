@@ -200,6 +200,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C8D2BF6606D443C5302703BC /* Build configuration list for PBXNativeTarget "sxBRZ" */;
 			buildPhases = (
+				E1065D792269CC1E0004C092 /* Lint Code */,
 				C8D2B46AD47291C091CFAA55 /* Sources */,
 				C8D2B7BB83469A2E2DF2478E /* Frameworks */,
 				C8D2B41FDEC24A136F4B7E7B /* CopyFiles */,
@@ -246,6 +247,27 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E1065D792269CC1E0004C092 /* Lint Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Lint Code";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "swiftlint || true\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C8D2B46AD47291C091CFAA55 /* Sources */ = {
