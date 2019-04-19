@@ -8,5 +8,7 @@
 import Foundation
 
 protocol ColorDistance {
-    static func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double
+    static var instance: ColorDistance { get }
+
+    func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double
 }

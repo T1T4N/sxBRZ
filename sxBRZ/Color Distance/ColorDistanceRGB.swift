@@ -8,12 +8,14 @@
 import Foundation
 
 struct ColorDistanceRGB: ColorDistance {
-    static func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double {
+    static let instance: ColorDistance = ColorDistanceRGB()
+
+    func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double {
         return DistYCbCrBuffer.dist(pix1, pix2)
-        //        if (pix1 == pix2) //about 4% perf boost
-        //        {
-        //            return 0.0;
-        //        }
-        //        return distYCbCr(pix1, pix2, luminanceWeight);
+//        if (pix1 == pix2) //about 4% perf boost
+//        {
+//            return 0.0;
+//        }
+//        return distYCbCr(pix1, pix2, luminanceWeight);
     }
 }

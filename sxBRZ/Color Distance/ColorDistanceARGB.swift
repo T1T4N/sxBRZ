@@ -8,7 +8,9 @@
 import Foundation
 
 struct ColorDistanceARGB: ColorDistance {
-    static func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double {
+    static let instance: ColorDistance = ColorDistanceARGB()
+
+    func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double {
         let a1 = Double(getAlpha(pix1)) / 255.0
         let a2 = Double(getAlpha(pix2)) / 255.0
         /*
@@ -21,12 +23,12 @@ struct ColorDistanceARGB: ColorDistance {
 
         //return std::min(a1, a2) * DistYCbCrBuffer::dist(pix1, pix2) + 255 * abs(a1 - a2);
         //=> following code is 15% faster:
-        let d = DistYCbCrBuffer.dist(pix1, pix2)
-        // let d = distYCbCr(pix1, pix2, 1.0)
+        let dist = DistYCbCrBuffer.dist(pix1, pix2)
+        // let dist = distYCbCr(pix1, pix2, 1.0)
         if a1 < a2 {
-            return a1 * d + 255 * (a2 - a1)
+            return a1 * dist + 255 * (a2 - a1)
         } else {
-            return a2 * d + 255 * (a1 - a2)
+            return a2 * dist + 255 * (a1 - a2)
         }
         //alternative? return std::sqrt(a1 * a2 * square(DistYCbCrBuffer::dist(pix1, pix2)) + square(255 * (a1 - a2)));
     }

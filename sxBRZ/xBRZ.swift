@@ -5,6 +5,7 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
 func getByte(_ N: UInt32, val: UInt32) -> CUnsignedChar {
     return CUnsignedChar((val >> (8 * N)) & 0xff)
 }
@@ -52,8 +53,7 @@ func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>, _ pitch:Int, _ col: UI
     fillBlock(&trg, pitch, col, n, n)
 }
 
-func distRGB(_ pix1: UInt32, _ pix2: UInt32) -> Double
-{
+func distRGB(_ pix1: UInt32, _ pix2: UInt32) -> Double {
     let r_diff = Double(Int(getRed  (pix1)) - Int(getRed  (pix2)))
     let g_diff = Double(Int(getGreen(pix1)) - Int(getGreen(pix2)))
     let b_diff = Double(Int(getBlue (pix1)) - Int(getBlue (pix2)))
@@ -62,8 +62,9 @@ func distRGB(_ pix1: UInt32, _ pix2: UInt32) -> Double
     return sqrt(pow(r_diff, 2) + pow(g_diff, 2) + pow(b_diff, 2))
 }
 
-func preProcessCorners(_ colorDistance:ColorDistance.Type, _ ker:Kernel_4x4, _ cfg:ScalerCfg) -> BlendResult
-{
+func preProcessCorners(_ colorDistance: ColorDistance,
+                       _ ker: Kernel_4x4,
+                       _ cfg: ScalerCfg) -> BlendResult {
     //result: F, G, J, K corners of "GradientType"
     var result = BlendResult()
 
@@ -78,13 +79,12 @@ func preProcessCorners(_ colorDistance:ColorDistance.Type, _ ker:Kernel_4x4, _ c
         return colorDistance.dist(pix1, pix2, cfg.luminanceWeight)
     }
 
-    let weight:Int = 4
-    let jg:Double = dist(ker.i, ker.f) + dist(ker.f, ker.c) + dist(ker.n, ker.k) + dist(ker.k, ker.h) + Double(weight) * dist(ker.j, ker.g)
-    let fk:Double = dist(ker.e, ker.j) + dist(ker.j, ker.o) + dist(ker.b, ker.g) + dist(ker.g, ker.l) + Double(weight) * dist(ker.f, ker.k)
+    let weight = 4
+    let jg = dist(ker.i, ker.f) + dist(ker.f, ker.c) + dist(ker.n, ker.k) + dist(ker.k, ker.h) + Double(weight) * dist(ker.j, ker.g)
+    let fk = dist(ker.e, ker.j) + dist(ker.j, ker.o) + dist(ker.b, ker.g) + dist(ker.g, ker.l) + Double(weight) * dist(ker.f, ker.k)
 
     //test sample: 70% of values max(jg, fk) / min(jg, fk) are between 1.1 and 3.7 with median being 1.8
-    if jg < fk
-    {
+    if jg < fk {
         let dominantGradient:Bool = cfg.dominantDirectionThreshold * jg < fk
         if ker.f != ker.g && ker.f != ker.j {
             result.blendF = dominantGradient ? BlendType.dominant : BlendType.normal
@@ -92,9 +92,7 @@ func preProcessCorners(_ colorDistance:ColorDistance.Type, _ ker:Kernel_4x4, _ c
         if ker.k != ker.j && ker.k != ker.g {
             result.blendK = dominantGradient ? BlendType.dominant : BlendType.normal
         }
-    }
-    else if fk < jg
-    {
+    } else if fk < jg {
         let dominantGradient:Bool = cfg.dominantDirectionThreshold * fk < jg
         if ker.j != ker.f && ker.j != ker.k {
             result.blendJ = dominantGradient ? BlendType.dominant : BlendType.normal
@@ -269,7 +267,14 @@ func rotateBlendInfo(_ rotDeg:RotationDegree, _ b:CUnsignedChar) -> CUnsignedCha
     let breakIntoDebugger = false
 #endif
 
-func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotDeg:RotationDegree, _ ker:Kernel_3x3, _ targetPt: inout UnsafeMutablePointer<UInt32>, _ trgWidth: Int, _ blendInfo:CUnsignedChar, _ cfg:ScalerCfg) {
+func blendPixel(_ scaler: Scaler.Type,
+                _ colorDistance: ColorDistance,
+                _ rotDeg: RotationDegree,
+                _ ker: Kernel_3x3,
+                _ targetPt: inout UnsafeMutablePointer<UInt32>,
+                _ trgWidth: Int,
+                _ blendInfo: CUnsignedChar,
+                _ cfg: ScalerCfg) {
 //    var a = get_a(rotDeg, &ker)
 //    var b = get_b(rotDeg, &ker)
 //    var c = get_c(rotDeg, &ker)
@@ -355,7 +360,15 @@ func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotD
     }
 }
 
-func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotDeg:RotationDegree, _ ker:Kernel_3x3, _ target: inout [UInt32], _ currentOffset: Int, _ trgWidth: Int, _ blendInfo:CUnsignedChar, _ cfg:ScalerCfg) {
+func blendPixel(_ scaler: Scaler.Type,
+                _ colorDistance: ColorDistance,
+                _ rotDeg: RotationDegree,
+                _ ker: Kernel_3x3,
+                _ target: inout [UInt32],
+                _ currentOffset: Int,
+                _ trgWidth: Int,
+                _ blendInfo: CUnsignedChar,
+                _ cfg: ScalerCfg) {
     //    var a = get_a(rotDeg, &ker)
     //    var b = get_b(rotDeg, &ker)
     //    var c = get_c(rotDeg, &ker)
@@ -365,7 +378,7 @@ func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotD
     //    var g = get_g(rotDeg, &ker)
     //    var h = get_h(rotDeg, &ker)
     //    var i = get_i(rotDeg, &ker)
-    
+
     var blend = rotateBlendInfo(rotDeg, blendInfo)
     if getBottomR(blend).rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
@@ -440,7 +453,13 @@ func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotD
     }
 }
 
-func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcPt: UnsafeMutablePointer<UInt32>, _ trgPt: inout UnsafeMutablePointer<UInt32>, _ srcWidth:Int, _ srcHeight:Int, _ cfg:ScalerCfg, _ yFirst:Int, _ yLast:Int) {
+func scaleImage(_ scaler: Scaler.Type,
+                _ colorDistance: ColorDistance,
+                _ srcPt: UnsafeMutablePointer<UInt32>,
+                _ trgPt: inout UnsafeMutablePointer<UInt32>,
+                _ srcWidth: Int, _ srcHeight: Int,
+                _ cfg: ScalerCfg,
+                _ yFirst: Int, _ yLast: Int) {
     let yFirst = max(yFirst, 0)
     let yLast = min(yLast, srcHeight)
     if yFirst >= yLast || srcWidth <= 0 {
@@ -448,7 +467,7 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcP
     }
     let src = UnsafeMutablePointer<UInt32>(srcPt)
     let trg = UnsafeMutablePointer<UInt32>(trgPt)
-    
+
     let trgWidth = srcWidth * scaler.scale
     //"use" space at the end of the image as temporary buffer for "on the fly preprocessing": we even could use larger area of
     //"sizeof(uint32_t) * srcWidth * (yLast - yFirst)" bytes without risk of accidental overwriting before accessing
@@ -457,18 +476,17 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcP
 //    let trgChar = UnsafeMutablePointer<CUnsignedChar>(trg + yLast * scaler.scale * trgWidth)
 //    let preProcBuffer:UnsafeMutablePointer<CUnsignedChar> = trgChar - bufferSize
     var preProcBuffer = [CUnsignedChar](repeating: 0, count: bufferSize)
-    
+
     assert(BlendType.none.rawValue == 0, "Blend NONE is not 0")
     //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
     //this cannot be optimized for adjacent processing stripes; we must not allow for a memory race condition!
-    if yFirst > 0
-    {
-        let y:Int = yFirst - 1
+    if yFirst > 0 {
+        let y = yFirst - 1
 
-        let s_m1:UnsafeMutablePointer<UInt32> = src + srcWidth * max(y - 1, 0)
-        let s_0:UnsafeMutablePointer<UInt32>  = src + srcWidth * y
-        let s_p1:UnsafeMutablePointer<UInt32> = src + srcWidth * min(y + 1, srcHeight - 1)
-        let s_p2:UnsafeMutablePointer<UInt32> = src + srcWidth * min(y + 2, srcHeight - 1)
+        let s_m1 = src + srcWidth * max(y - 1, 0)
+        let s_0  = src + srcWidth * y
+        let s_p1 = src + srcWidth * min(y + 1, srcHeight - 1)
+        let s_p2 = src + srcWidth * min(y + 2, srcHeight - 1)
 
         for x in 0..<srcWidth {
             let x_m1 = max(x - 1, 0)
@@ -600,8 +618,13 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcP
     }
 }
 
-
-func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ src: [UInt32], _ trg: inout [UInt32], _ srcWidth:Int, _ srcHeight:Int, _ cfg:ScalerCfg, _ yFirst:Int, _ yLast:Int) {
+func scaleImage(_ scaler: Scaler.Type,
+                _ colorDistance: ColorDistance,
+                _ src: [UInt32],
+                _ trg: inout [UInt32],
+                _ srcWidth: Int, _ srcHeight: Int,
+                _ cfg: ScalerCfg,
+                _ yFirst: Int, _ yLast: Int) {
     let yFirst = max(yFirst, 0)
     let yLast = min(yLast, srcHeight)
     if yFirst >= yLast || srcWidth <= 0 {
@@ -620,8 +643,7 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ src:
     assert(BlendType.none.rawValue == 0, "Blend NONE is not 0")
     //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
     //this cannot be optimized for adjacent processing stripes; we must not allow for a memory race condition!
-    if yFirst > 0
-    {
+    if yFirst > 0 {
         let y:Int = yFirst - 1
         
         let s_m1 = srcWidth * max(y - 1, 0)
@@ -774,81 +796,178 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ src:
     }
 }
 
-func scale(_ factor: UInt, _ src: UnsafeMutablePointer<UInt32>, _ trg: inout UnsafeMutablePointer<UInt32>, _ srcWidth:Int, _ srcHeight:Int, _ colFmt:ColorFormat, _ cfg:ScalerCfg, _ yFirst:Int = 0, _ yLast:Int = Int.max) {
+func scale(_ factor: UInt,
+           _ src: UnsafeMutablePointer<UInt32>,
+           _ trg: inout UnsafeMutablePointer<UInt32>,
+           _ srcWidth: Int, _ srcHeight: Int,
+           _ colFmt: ColorFormat,
+           _ cfg: ScalerCfg,
+           _ yFirst: Int = 0, _ yLast: Int = .max) {
     switch colFmt {
     case .argb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler2x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler3x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler4x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler5x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 6:
-            return scaleImage(Scaler6x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler6x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         default:
             return
         }
     case .rgb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler2x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler3x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler4x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler5x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 6:
-            return scaleImage(Scaler6x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler6x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         default:
             return
         }
     }
 }
 
-func scale(_ factor: UInt, _ src: [UInt32], _ trg: inout [UInt32], _ srcWidth:Int, _ srcHeight:Int, _ colFmt:ColorFormat, _ cfg:ScalerCfg, _ yFirst:Int = 0, _ yLast:Int = Int.max) {
+func scale(_ factor: UInt,
+           _ src: [UInt32],
+           _ trg: inout [UInt32],
+           _ srcWidth: Int,
+           _ srcHeight: Int,
+           _ colFmt: ColorFormat,
+           _ cfg: ScalerCfg,
+           _ yFirst: Int = 0,
+           _ yLast: Int = .max) {
     switch colFmt {
     case .argb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler2x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler3x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler4x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler5x<ColorGradientARGB>.self,
+                              ColorDistanceARGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 6:
-        return scaleImage(Scaler6x<ColorGradientARGB>.self, ColorDistanceARGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+        return scaleImage(Scaler6x<ColorGradientARGB>.self,
+                          ColorDistanceARGB.instance,
+                          src, &trg,
+                          srcWidth, srcHeight,
+                          cfg, yFirst, yLast)
         default:
             return
         }
     case .rgb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler2x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler3x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler4x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler5x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         case 6:
-            return scaleImage(Scaler6x<ColorGradientRGB>.self, ColorDistanceRGB.self, src, &trg, srcWidth, srcHeight, cfg, yFirst, yLast)
+            return scaleImage(Scaler6x<ColorGradientRGB>.self,
+                              ColorDistanceRGB.instance,
+                              src, &trg,
+                              srcWidth, srcHeight,
+                              cfg, yFirst, yLast)
         default:
             return
         }
     }
 }
 
-func equalColorTest(_ col1:UInt32, _ col2:UInt32, _ colFmt: ColorFormat, _ luminanceWeight: Double, _ equalColorTolerance: Double) -> Bool {
+func equalColorTest(_ col1:UInt32, _ col2:UInt32,
+                    _ colFmt: ColorFormat,
+                    _ luminanceWeight: Double,
+                    _ equalColorTolerance: Double) -> Bool {
     switch colFmt {
     case .argb:
-        return ColorDistanceARGB.dist(col1, col2, luminanceWeight) < equalColorTolerance
+        return ColorDistanceARGB.instance.dist(col1, col2, luminanceWeight) < equalColorTolerance
     case .rgb:
-        return ColorDistanceRGB.dist(col1, col2, luminanceWeight) < equalColorTolerance
+        return ColorDistanceRGB.instance.dist(col1, col2, luminanceWeight) < equalColorTolerance
     }
 }
