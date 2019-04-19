@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ColorFormat {
+public enum ColorFormat {
     case rgb
     case argb
 }

@@ -113,7 +113,7 @@ func getPixelData(_ imageRef: CGImage) -> [UInt32] {
 }
 
 extension CGImage {
-    func pixelData() -> [RawPixel] {
+    public func pixelData() -> [RawPixel] {
         return getPixelData(self)
     }
 }

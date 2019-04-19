@@ -5,8 +5,8 @@
 //  Created by T!T@N on 04.22.16.
 //
 
-import Foundation
 import AppKit
+import sxBRZ
 
 func isValid(scale: String) -> Bool {
     switch scale {
@@ -46,7 +46,7 @@ let height = cgRef.height
 let outWidth = scaleFactor * width
 let outHeight = scaleFactor * height
 
-var rawData = getPixelData(cgRef)
+var rawData = cgRef.pixelData()
 let rawDataPtr = UnsafeMutablePointer<RawPixel>(mutating: rawData)
 
 var outputData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * height * width)

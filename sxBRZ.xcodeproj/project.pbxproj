@@ -7,33 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C8D2B006DB24F87845062688 /* BlendType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */; };
-		C8D2B01CE17DE8969F8FF272 /* DistYCbCrBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B7406BE8CD34DFB3DBB8 /* DistYCbCrBuffer.swift */; };
-		C8D2B0A993E951ED8F452C5E /* Kernel4.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5071D5228AE7492AC50 /* Kernel4.swift */; };
-		C8D2B22B9E40501DE7F6DBA2 /* ScalerCfg.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8093CE729318EE91FDB /* ScalerCfg.swift */; };
-		C8D2B2736F841BB3125BA0E5 /* MatrixRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */; };
-		C8D2B3D1F69A0AFF097CB271 /* ColorGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5FD66C44333CB715943 /* ColorGradient.swift */; };
-		C8D2B520B303237A157804E2 /* Scaler6x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BFA90B841DD60C8BE9F3 /* Scaler6x.swift */; };
-		C8D2B563911B5F9A458A792C /* OutputMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */; };
-		C8D2B65986F50591C800CC7A /* Scaler5x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B4468A1C95F43E71139F /* Scaler5x.swift */; };
-		C8D2B781A83941C76807443C /* Scaler4x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5C83B1858189FC69391 /* Scaler4x.swift */; };
-		C8D2B8344A07DAB5BBC24B58 /* Scaler3x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B44044436800D21D742C /* Scaler3x.swift */; };
-		C8D2B9D486BB6C7369035830 /* Scaler2x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B714F8873FEF6A2511BB /* Scaler2x.swift */; };
-		C8D2B9EBB186075376CC26D3 /* RotationDegree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */; };
-		C8D2BB0D7C80C59132ED9555 /* BlendResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BEB9750EAE1D49532F1F /* BlendResult.swift */; };
-		C8D2BCD57A0C1BB2921AD4CD /* Scaler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8A579BEA049D63DEBA4 /* Scaler.swift */; };
-		C8D2BD04F77DA71EAC12B4FB /* xBRZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B0B101280A2A12D7A33B /* xBRZ.swift */; };
-		C8D2BD29ACF495EB9E58CAFB /* ColorGradientRGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B127043753B5F3DD733A /* ColorGradientRGB.swift */; };
-		C8D2BDC6318A07A661065BFA /* ColorDistanceRGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8307F66C139387802CC /* ColorDistanceRGB.swift */; };
-		C8D2BDE61366DFFD80FEF70D /* ColorDistanceARGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BA61ACFC9C31D14ABF85 /* ColorDistanceARGB.swift */; };
-		C8D2BE00E89A92AD92849F7C /* ColorFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BF725F319E6009655460 /* ColorFormat.swift */; };
 		C8D2BE04E98AE8C9681A253E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B391CFB88D60024FE596 /* main.swift */; };
-		C8D2BE051EACC00275F8A7B2 /* ColorGradientARGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */; };
-		C8D2BE38A429FBC24140023D /* ColorDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BED1545E5085B6E4AA83 /* ColorDistance.swift */; };
-		C8D2BF304BE85986FF03C9F8 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */; };
-		E1065D7B2269E0770004C092 /* Kernel3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7A2269E0770004C092 /* Kernel3.swift */; };
-		E1065D7D2269EFCF0004C092 /* Pixels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7C2269EFCF0004C092 /* Pixels.swift */; };
+		E1D2805A226A6E52005343FD /* sxBRZ.h in Headers */ = {isa = PBXBuildFile; fileRef = E1D28058226A6E52005343FD /* sxBRZ.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E1D2805F226A6E79005343FD /* xBRZ.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B0B101280A2A12D7A33B /* xBRZ.swift */; };
+		E1D28060226A6EA7005343FD /* Scaler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8A579BEA049D63DEBA4 /* Scaler.swift */; };
+		E1D28061226A6EA7005343FD /* Scaler2x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B714F8873FEF6A2511BB /* Scaler2x.swift */; };
+		E1D28062226A6EA7005343FD /* Scaler3x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B44044436800D21D742C /* Scaler3x.swift */; };
+		E1D28063226A6EA7005343FD /* Scaler4x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5C83B1858189FC69391 /* Scaler4x.swift */; };
+		E1D28064226A6EA7005343FD /* Scaler5x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B4468A1C95F43E71139F /* Scaler5x.swift */; };
+		E1D28065226A6EA7005343FD /* Scaler6x.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BFA90B841DD60C8BE9F3 /* Scaler6x.swift */; };
+		E1D28066226A6EAD005343FD /* ColorDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BED1545E5085B6E4AA83 /* ColorDistance.swift */; };
+		E1D28067226A6EAD005343FD /* ColorDistanceRGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8307F66C139387802CC /* ColorDistanceRGB.swift */; };
+		E1D28068226A6EAD005343FD /* ColorDistanceARGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BA61ACFC9C31D14ABF85 /* ColorDistanceARGB.swift */; };
+		E1D28069226A6EAD005343FD /* DistYCbCrBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B7406BE8CD34DFB3DBB8 /* DistYCbCrBuffer.swift */; };
+		E1D2806A226A6EB3005343FD /* ColorGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5FD66C44333CB715943 /* ColorGradient.swift */; };
+		E1D2806B226A6EB3005343FD /* ColorGradientRGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B127043753B5F3DD733A /* ColorGradientRGB.swift */; };
+		E1D2806C226A6EB3005343FD /* ColorGradientARGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */; };
+		E1D2806D226A6EB8005343FD /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */; };
+		E1D2806E226A6EB8005343FD /* Pixels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7C2269EFCF0004C092 /* Pixels.swift */; };
+		E1D2806F226A6EBE005343FD /* MatrixRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */; };
+		E1D28070226A6EBE005343FD /* ScalerCfg.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8093CE729318EE91FDB /* ScalerCfg.swift */; };
+		E1D28071226A6EBE005343FD /* BlendResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BEB9750EAE1D49532F1F /* BlendResult.swift */; };
+		E1D28072226A6EBE005343FD /* BlendType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */; };
+		E1D28073226A6EBE005343FD /* ColorFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BF725F319E6009655460 /* ColorFormat.swift */; };
+		E1D28074226A6EBE005343FD /* RotationDegree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */; };
+		E1D28075226A6EBE005343FD /* Kernel4.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5071D5228AE7492AC50 /* Kernel4.swift */; };
+		E1D28076226A6EBE005343FD /* Kernel3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7A2269E0770004C092 /* Kernel3.swift */; };
+		E1D28077226A6EBE005343FD /* OutputMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */; };
+		E1D28079226A6F51005343FD /* sxBRZ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1D28056226A6E52005343FD /* sxBRZ.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E1D2807A226A6FEC005343FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C8D2B01F1243270A04BAFFA5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E1D28055226A6E52005343FD;
+			remoteInfo = sxBRZ;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		C8D2B41FDEC24A136F4B7E7B /* CopyFiles */ = {
@@ -50,7 +62,7 @@
 /* Begin PBXFileReference section */
 		C8D2B0B101280A2A12D7A33B /* xBRZ.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = xBRZ.swift; sourceTree = "<group>"; };
 		C8D2B127043753B5F3DD733A /* ColorGradientRGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradientRGB.swift; sourceTree = "<group>"; };
-		C8D2B3194D17D6D4E8E3BE45 /* sxBRZ-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sxBRZ-Bridging-Header.h"; sourceTree = "<group>"; };
+		C8D2B3194D17D6D4E8E3BE45 /* sxBRZ-cli-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sxBRZ-cli-Bridging-Header.h"; sourceTree = "<group>"; };
 		C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutputMatrix.swift; sourceTree = "<group>"; };
 		C8D2B391CFB88D60024FE596 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C8D2B44044436800D21D742C /* Scaler3x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler3x.swift; sourceTree = "<group>"; };
@@ -68,7 +80,7 @@
 		C8D2BA61ACFC9C31D14ABF85 /* ColorDistanceARGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorDistanceARGB.swift; sourceTree = "<group>"; };
 		C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixRotation.swift; sourceTree = "<group>"; };
 		C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
-		C8D2BD8E58106D4451A7462B /* sxBRZ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sxBRZ; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8D2BD8E58106D4451A7462B /* sxBRZ-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "sxBRZ-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D2BEB9750EAE1D49532F1F /* BlendResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlendResult.swift; sourceTree = "<group>"; };
 		C8D2BED1545E5085B6E4AA83 /* ColorDistance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorDistance.swift; sourceTree = "<group>"; };
 		C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradientARGB.swift; sourceTree = "<group>"; };
@@ -76,10 +88,26 @@
 		C8D2BFA90B841DD60C8BE9F3 /* Scaler6x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler6x.swift; sourceTree = "<group>"; };
 		E1065D7A2269E0770004C092 /* Kernel3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kernel3.swift; sourceTree = "<group>"; };
 		E1065D7C2269EFCF0004C092 /* Pixels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pixels.swift; sourceTree = "<group>"; };
+		E1D2804C226A6DCF005343FD /* xbrz.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xbrz.h; sourceTree = "<group>"; };
+		E1D2804D226A6DCF005343FD /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		E1D2804E226A6DCF005343FD /* xbrz.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xbrz.cpp; sourceTree = "<group>"; };
+		E1D2804F226A6DCF005343FD /* ObjCtoCPP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCtoCPP.h; sourceTree = "<group>"; };
+		E1D28050226A6DCF005343FD /* ObjCtoCPP.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCtoCPP.mm; sourceTree = "<group>"; };
+		E1D28056226A6E52005343FD /* sxBRZ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = sxBRZ.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1D28058226A6E52005343FD /* sxBRZ.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sxBRZ.h; sourceTree = "<group>"; };
+		E1D28059226A6E52005343FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		C8D2B7BB83469A2E2DF2478E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1D28079226A6F51005343FD /* sxBRZ.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1D28053226A6E52005343FD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -92,6 +120,11 @@
 		C8D2B0EF0BC95B18BD708532 /* CPP */ = {
 			isa = PBXGroup;
 			children = (
+				E1D2804D226A6DCF005343FD /* config.h */,
+				E1D2804F226A6DCF005343FD /* ObjCtoCPP.h */,
+				E1D28050226A6DCF005343FD /* ObjCtoCPP.mm */,
+				E1D2804E226A6DCF005343FD /* xbrz.cpp */,
+				E1D2804C226A6DCF005343FD /* xbrz.h */,
 			);
 			path = CPP;
 			sourceTree = "<group>";
@@ -109,8 +142,8 @@
 			isa = PBXGroup;
 			children = (
 				C8D2B5FD66C44333CB715943 /* ColorGradient.swift */,
-				C8D2B127043753B5F3DD733A /* ColorGradientRGB.swift */,
 				C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */,
+				C8D2B127043753B5F3DD733A /* ColorGradientRGB.swift */,
 			);
 			path = "Color Gradient";
 			sourceTree = "<group>";
@@ -118,7 +151,8 @@
 		C8D2B43C16BED5F9843BEA3F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C8D2BD8E58106D4451A7462B /* sxBRZ */,
+				C8D2BD8E58106D4451A7462B /* sxBRZ-cli */,
+				E1D28056226A6E52005343FD /* sxBRZ.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,15 +160,15 @@
 		C8D2B5CA22C08D2A95F61475 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */,
-				C8D2B8093CE729318EE91FDB /* ScalerCfg.swift */,
 				C8D2BEB9750EAE1D49532F1F /* BlendResult.swift */,
 				C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */,
 				C8D2BF725F319E6009655460 /* ColorFormat.swift */,
-				C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */,
-				C8D2B5071D5228AE7492AC50 /* Kernel4.swift */,
 				E1065D7A2269E0770004C092 /* Kernel3.swift */,
+				C8D2B5071D5228AE7492AC50 /* Kernel4.swift */,
+				C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */,
 				C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */,
+				C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */,
+				C8D2B8093CE729318EE91FDB /* ScalerCfg.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -143,34 +177,28 @@
 			isa = PBXGroup;
 			children = (
 				C8D2BED1545E5085B6E4AA83 /* ColorDistance.swift */,
-				C8D2B8307F66C139387802CC /* ColorDistanceRGB.swift */,
 				C8D2BA61ACFC9C31D14ABF85 /* ColorDistanceARGB.swift */,
+				C8D2B8307F66C139387802CC /* ColorDistanceRGB.swift */,
 				C8D2B7406BE8CD34DFB3DBB8 /* DistYCbCrBuffer.swift */,
 			);
 			path = "Color Distance";
 			sourceTree = "<group>";
 		};
-		C8D2BA10EABE7DF6D9894166 /* sxBRZ */ = {
+		C8D2BA10EABE7DF6D9894166 /* sxBRZ-cli */ = {
 			isa = PBXGroup;
 			children = (
 				C8D2B391CFB88D60024FE596 /* main.swift */,
-				C8D2B0B101280A2A12D7A33B /* xBRZ.swift */,
-				C8D2BFDBB60E9A5718D0F22C /* Scalers */,
-				C8D2B0EF0BC95B18BD708532 /* CPP */,
-				C8D2B62F3CF4D9B1387250BF /* Color Distance */,
-				C8D2B3B63C97734ECF4F772C /* Color Gradient */,
-				C8D2B1EC7F8D1D6E9FB66777 /* Utils */,
-				C8D2B5CA22C08D2A95F61475 /* Data */,
-				C8D2B3194D17D6D4E8E3BE45 /* sxBRZ-Bridging-Header.h */,
+				C8D2B3194D17D6D4E8E3BE45 /* sxBRZ-cli-Bridging-Header.h */,
 			);
-			path = sxBRZ;
+			path = "sxBRZ-cli";
 			sourceTree = "<group>";
 		};
 		C8D2BCD2F2F51D4DC3BB9EB6 = {
 			isa = PBXGroup;
 			children = (
+				E1D2804B226A6DB0005343FD /* Sources */,
 				C8D2B43C16BED5F9843BEA3F /* Products */,
-				C8D2BA10EABE7DF6D9894166 /* sxBRZ */,
+				E1D28078226A6F51005343FD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -187,12 +215,63 @@
 			path = Scalers;
 			sourceTree = "<group>";
 		};
+		E1D2804B226A6DB0005343FD /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				C8D2B0EF0BC95B18BD708532 /* CPP */,
+				E1D28057226A6E52005343FD /* sxBRZ */,
+				C8D2BA10EABE7DF6D9894166 /* sxBRZ-cli */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		E1D28057226A6E52005343FD /* sxBRZ */ = {
+			isa = PBXGroup;
+			children = (
+				C8D2B62F3CF4D9B1387250BF /* Color Distance */,
+				C8D2B3B63C97734ECF4F772C /* Color Gradient */,
+				C8D2B5CA22C08D2A95F61475 /* Data */,
+				C8D2BFDBB60E9A5718D0F22C /* Scalers */,
+				E1D2805E226A6E68005343FD /* Support Files */,
+				C8D2B1EC7F8D1D6E9FB66777 /* Utils */,
+				C8D2B0B101280A2A12D7A33B /* xBRZ.swift */,
+			);
+			path = sxBRZ;
+			sourceTree = "<group>";
+		};
+		E1D2805E226A6E68005343FD /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				E1D28058226A6E52005343FD /* sxBRZ.h */,
+				E1D28059226A6E52005343FD /* Info.plist */,
+			);
+			name = "Support Files";
+			sourceTree = "<group>";
+		};
+		E1D28078226A6F51005343FD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		E1D28051226A6E52005343FD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1D2805A226A6E52005343FD /* sxBRZ.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		C8D2B72597313C335BA9DCD9 /* sxBRZ */ = {
+		C8D2B72597313C335BA9DCD9 /* sxBRZ-cli */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C8D2BF6606D443C5302703BC /* Build configuration list for PBXNativeTarget "sxBRZ" */;
+			buildConfigurationList = C8D2BF6606D443C5302703BC /* Build configuration list for PBXNativeTarget "sxBRZ-cli" */;
 			buildPhases = (
 				E1065D792269CC1E0004C092 /* Lint Code */,
 				C8D2B46AD47291C091CFAA55 /* Sources */,
@@ -202,11 +281,31 @@
 			buildRules = (
 			);
 			dependencies = (
+				E1D2807B226A6FEC005343FD /* PBXTargetDependency */,
+			);
+			name = "sxBRZ-cli";
+			productName = sxBRZ;
+			productReference = C8D2BD8E58106D4451A7462B /* sxBRZ-cli */;
+			productType = "com.apple.product-type.tool";
+		};
+		E1D28055226A6E52005343FD /* sxBRZ */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E1D2805B226A6E52005343FD /* Build configuration list for PBXNativeTarget "sxBRZ" */;
+			buildPhases = (
+				E1D2807C226A6FF4005343FD /* Lint Code */,
+				E1D28051226A6E52005343FD /* Headers */,
+				E1D28052226A6E52005343FD /* Sources */,
+				E1D28053226A6E52005343FD /* Frameworks */,
+				E1D28054226A6E52005343FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
 			);
 			name = sxBRZ;
 			productName = sxBRZ;
-			productReference = C8D2BD8E58106D4451A7462B /* sxBRZ */;
-			productType = "com.apple.product-type.tool";
+			productReference = E1D28056226A6E52005343FD /* sxBRZ.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -221,6 +320,10 @@
 				TargetAttributes = {
 					C8D2B72597313C335BA9DCD9 = {
 						LastSwiftMigration = 1020;
+					};
+					E1D28055226A6E52005343FD = {
+						CreatedOnToolsVersion = 10.2.1;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -237,10 +340,21 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C8D2B72597313C335BA9DCD9 /* sxBRZ */,
+				E1D28055226A6E52005343FD /* sxBRZ */,
+				C8D2B72597313C335BA9DCD9 /* sxBRZ-cli */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E1D28054226A6E52005343FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		E1065D792269CC1E0004C092 /* Lint Code */ = {
@@ -259,7 +373,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# swiftlint || true\n\n";
+			shellScript = "swiftlint || true\n\n";
+		};
+		E1D2807C226A6FF4005343FD /* Lint Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Lint Code";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "swiftlint || true\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -269,35 +401,50 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8D2BE04E98AE8C9681A253E /* main.swift in Sources */,
-				C8D2BD04F77DA71EAC12B4FB /* xBRZ.swift in Sources */,
-				C8D2BCD57A0C1BB2921AD4CD /* Scaler.swift in Sources */,
-				C8D2B9D486BB6C7369035830 /* Scaler2x.swift in Sources */,
-				C8D2B8344A07DAB5BBC24B58 /* Scaler3x.swift in Sources */,
-				C8D2B781A83941C76807443C /* Scaler4x.swift in Sources */,
-				C8D2B65986F50591C800CC7A /* Scaler5x.swift in Sources */,
-				C8D2B520B303237A157804E2 /* Scaler6x.swift in Sources */,
-				C8D2BE38A429FBC24140023D /* ColorDistance.swift in Sources */,
-				C8D2BDC6318A07A661065BFA /* ColorDistanceRGB.swift in Sources */,
-				E1065D7D2269EFCF0004C092 /* Pixels.swift in Sources */,
-				C8D2BDE61366DFFD80FEF70D /* ColorDistanceARGB.swift in Sources */,
-				C8D2B3D1F69A0AFF097CB271 /* ColorGradient.swift in Sources */,
-				C8D2B01CE17DE8969F8FF272 /* DistYCbCrBuffer.swift in Sources */,
-				C8D2BD29ACF495EB9E58CAFB /* ColorGradientRGB.swift in Sources */,
-				C8D2BE051EACC00275F8A7B2 /* ColorGradientARGB.swift in Sources */,
-				C8D2BF304BE85986FF03C9F8 /* ImageUtils.swift in Sources */,
-				C8D2B2736F841BB3125BA0E5 /* MatrixRotation.swift in Sources */,
-				C8D2B22B9E40501DE7F6DBA2 /* ScalerCfg.swift in Sources */,
-				C8D2BB0D7C80C59132ED9555 /* BlendResult.swift in Sources */,
-				C8D2B006DB24F87845062688 /* BlendType.swift in Sources */,
-				C8D2BE00E89A92AD92849F7C /* ColorFormat.swift in Sources */,
-				E1065D7B2269E0770004C092 /* Kernel3.swift in Sources */,
-				C8D2B9EBB186075376CC26D3 /* RotationDegree.swift in Sources */,
-				C8D2B0A993E951ED8F452C5E /* Kernel4.swift in Sources */,
-				C8D2B563911B5F9A458A792C /* OutputMatrix.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1D28052226A6E52005343FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E1D28066226A6EAD005343FD /* ColorDistance.swift in Sources */,
+				E1D28072226A6EBE005343FD /* BlendType.swift in Sources */,
+				E1D2805F226A6E79005343FD /* xBRZ.swift in Sources */,
+				E1D28060226A6EA7005343FD /* Scaler.swift in Sources */,
+				E1D2806A226A6EB3005343FD /* ColorGradient.swift in Sources */,
+				E1D2806B226A6EB3005343FD /* ColorGradientRGB.swift in Sources */,
+				E1D2806F226A6EBE005343FD /* MatrixRotation.swift in Sources */,
+				E1D28071226A6EBE005343FD /* BlendResult.swift in Sources */,
+				E1D28064226A6EA7005343FD /* Scaler5x.swift in Sources */,
+				E1D28068226A6EAD005343FD /* ColorDistanceARGB.swift in Sources */,
+				E1D28077226A6EBE005343FD /* OutputMatrix.swift in Sources */,
+				E1D28070226A6EBE005343FD /* ScalerCfg.swift in Sources */,
+				E1D28074226A6EBE005343FD /* RotationDegree.swift in Sources */,
+				E1D28065226A6EA7005343FD /* Scaler6x.swift in Sources */,
+				E1D2806D226A6EB8005343FD /* ImageUtils.swift in Sources */,
+				E1D28075226A6EBE005343FD /* Kernel4.swift in Sources */,
+				E1D28069226A6EAD005343FD /* DistYCbCrBuffer.swift in Sources */,
+				E1D28067226A6EAD005343FD /* ColorDistanceRGB.swift in Sources */,
+				E1D28062226A6EA7005343FD /* Scaler3x.swift in Sources */,
+				E1D2806E226A6EB8005343FD /* Pixels.swift in Sources */,
+				E1D28073226A6EBE005343FD /* ColorFormat.swift in Sources */,
+				E1D28076226A6EBE005343FD /* Kernel3.swift in Sources */,
+				E1D2806C226A6EB3005343FD /* ColorGradientARGB.swift in Sources */,
+				E1D28063226A6EA7005343FD /* Scaler4x.swift in Sources */,
+				E1D28061226A6EA7005343FD /* Scaler2x.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E1D2807B226A6FEC005343FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E1D28055226A6E52005343FD /* sxBRZ */;
+			targetProxy = E1D2807A226A6FEC005343FD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C8D2B0CD921E9D81524283B6 /* Release */ = {
@@ -306,7 +453,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "sxBRZ/sxBRZ-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/$(TARGET_NAME)/$(TARGET_NAME)-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -373,7 +520,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "sxBRZ/sxBRZ-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/$(TARGET_NAME)/$(TARGET_NAME)-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -428,6 +575,70 @@
 			};
 			name = Release;
 		};
+		E1D2805C226A6E52005343FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Sources/$(TARGET_NAME)/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.titantech.sxBRZ;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E1D2805D226A6E52005343FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = "Sources/$(TARGET_NAME)/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.titantech.sxBRZ;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -440,11 +651,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C8D2BF6606D443C5302703BC /* Build configuration list for PBXNativeTarget "sxBRZ" */ = {
+		C8D2BF6606D443C5302703BC /* Build configuration list for PBXNativeTarget "sxBRZ-cli" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C8D2BD66FF7428FA5BEAE64C /* Debug */,
 				C8D2B0CD921E9D81524283B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E1D2805B226A6E52005343FD /* Build configuration list for PBXNativeTarget "sxBRZ" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1D2805C226A6E52005343FD /* Debug */,
+				E1D2805D226A6E52005343FD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

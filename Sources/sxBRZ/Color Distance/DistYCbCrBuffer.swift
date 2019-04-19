@@ -7,7 +7,7 @@
 
 import Foundation
 
-func distYCbCr(_ pix1: UInt32, _ pix2: UInt32, _ lumaWeight: Double = 1.0) -> Double
+func distYCbCr(_ pix1: RawPixel, _ pix2: RawPixel, _ lumaWeight: Double = 1.0) -> Double
 {
     //http://en.wikipedia.org/wiki/YCbCr#ITU-R_BT.601_conversion
     //YCbCr conversion is a matrix multiplication => take advantage of linearity by subtracting first!
@@ -36,11 +36,11 @@ struct DistYCbCrBuffer {
     var buffer: [Float]
     fileprivate init() {
         buffer = [Float](repeating: 0.0, count: 256*256*256)
-        for i:UInt32 in 0 ..< 256 * 256 * 256 //startup time: 114 ms on Intel Core i5 (four cores)
+        for i: RawPixel in 0 ..< 256 * 256 * 256 //startup time: 114 ms on Intel Core i5 (four cores)
         {
-            let r_diff = Int(getByte(2, val: i)) * 2 - 255
-            let g_diff = Int(getByte(1, val: i)) * 2 - 255
-            let b_diff = Int(getByte(0, val: i)) * 2 - 255
+            let r_diff = Int(i.red) * 2 - 255
+            let g_diff = Int(i.green) * 2 - 255
+            let b_diff = Int(i.blue) * 2 - 255
             
             let k_b:Double = 0.0593 //ITU-R BT.2020 conversion
             let k_r:Double = 0.2627 //
@@ -57,8 +57,7 @@ struct DistYCbCrBuffer {
         }
     }
     
-    func distImpl(_ pix1: UInt32, _ pix2: UInt32) -> Double
-    {
+    func distImpl(_ pix1: RawPixel, _ pix2: RawPixel) -> Double {
         //if (pix1 == pix2) -> 8% perf degradation!
         //    return 0;
         //if (pix1 > pix2)
@@ -73,8 +72,7 @@ struct DistYCbCrBuffer {
         return Double(buffer[buff_idx])
     }
     static let inst = DistYCbCrBuffer()
-    static func dist(_ pix1:UInt32, _ pix2:UInt32) -> Double
-    {
+    static func dist(_ pix1: RawPixel, _ pix2: RawPixel) -> Double {
         return inst.distImpl(pix1, pix2)
     }
 }

@@ -661,13 +661,13 @@ func scaleImage(_ scaler: Scaler,
     }
 }
 
-func scale(_ factor: UInt,
-           _ src: UnsafeMutablePointer<UInt32>,
-           _ trg: inout UnsafeMutablePointer<UInt32>,
-           _ srcWidth: Int, _ srcHeight: Int,
-           _ colFmt: ColorFormat,
-           _ cfg: ScalerCfg,
-           _ yFirst: Int = 0, _ yLast: Int = .max) {
+public func scale(_ factor: UInt,
+                  _ src: UnsafeMutablePointer<UInt32>,
+                  _ trg: inout UnsafeMutablePointer<UInt32>,
+                  _ srcWidth: Int, _ srcHeight: Int,
+                  _ colFmt: ColorFormat,
+                  _ cfg: ScalerCfg,
+                  _ yFirst: Int = 0, _ yLast: Int = .max) {
     switch factor {
     case 2:
         return scaleImage(Scaler2x(gradient: colFmt.gradient),
@@ -704,15 +704,15 @@ func scale(_ factor: UInt,
     }
 }
 
-func scale(_ factor: UInt,
-           _ src: [UInt32],
-           _ trg: inout [UInt32],
-           _ srcWidth: Int,
-           _ srcHeight: Int,
-           _ colFmt: ColorFormat,
-           _ cfg: ScalerCfg,
-           _ yFirst: Int = 0,
-           _ yLast: Int = .max) {
+public func scale(_ factor: UInt,
+                  _ src: [UInt32],
+                  _ trg: inout [UInt32],
+                  _ srcWidth: Int,
+                  _ srcHeight: Int,
+                  _ colFmt: ColorFormat,
+                  _ cfg: ScalerCfg,
+                  _ yFirst: Int = 0,
+                  _ yLast: Int = .max) {
     switch factor {
     case 2:
         return scaleImage(Scaler2x(gradient: colFmt.gradient),
