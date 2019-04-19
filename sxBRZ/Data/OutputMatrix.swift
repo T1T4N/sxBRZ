@@ -7,48 +7,53 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
 class OutputMatrix {
     let N: UInt
-    let rotDeg:RotationDegree
-    let out:UnsafeMutablePointer<UInt32>
+    let rotDeg: RotationDegree
+    let out: UnsafeMutablePointer<UInt32>
     let outWidth: Int
-    
-    init(_ N: UInt, _ rotDeg: RotationDegree, _ out: inout UnsafeMutablePointer<UInt32>, _ outWidth: Int ) {
+
+    init(_ N: UInt, _ rotDeg: RotationDegree,
+         _ out: inout UnsafeMutablePointer<UInt32>, _ outWidth: Int ) {
         self.N = N
         self.rotDeg = rotDeg
         self.out = out
         self.outWidth = outWidth
     }
 
-    init(_ N: UInt, _ rotDeg: RotationDegree, out: inout [UInt32], _ currentOffset: Int, _ outWidth: Int ) {
+    init(_ N: UInt, _ rotDeg: RotationDegree,
+         out: inout [UInt32], _ currentOffset: Int, _ outWidth: Int ) {
         self.N = N
         self.rotDeg = rotDeg
         self.out = UnsafeMutablePointer<UInt32>(mutating: out) + currentOffset
         self.outWidth = outWidth
     }
 
-    func ref(_ I:UInt, _ J:UInt) -> UnsafeMutablePointer<UInt32> {
+    func ref(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<UInt32> {
         let I_old = MatrixRotation.getInstance(rotDeg, I, J, N).I_old
         let J_old = MatrixRotation.getInstance(rotDeg, I, J, N).J_old
-        //        return UnsafeMutablePointer<UInt32>(out) + Int(J_old) + Int(I_old) * outWidth
+        //return UnsafeMutablePointer<UInt32>(out) + Int(J_old) + Int(I_old) * outWidth
         return (out + Int(J_old) + Int(I_old) * outWidth)
     }
-    
+
     static func ref(_ N: UInt, _ rotDeg: RotationDegree,
                     _ target: [UInt32],
                     _ currentOffset: Int,
-                    _ outWidth:Int)
+                    _ outWidth: Int)
         -> (UInt, UInt) -> UnsafeMutablePointer<UInt32> {
             func refx(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<UInt32> {
                 let I_old = MatrixRotation.getInstance(rotDeg, I, J, N).I_old
                 let J_old = MatrixRotation.getInstance(rotDeg, I, J, N).J_old
-                return UnsafeMutablePointer<UInt32>(mutating: target) + currentOffset + Int(J_old) + Int(I_old) * outWidth
+                return UnsafeMutablePointer<UInt32>(mutating: target) +
+                    currentOffset + Int(J_old) + Int(I_old) * outWidth
             }
             return refx
     }
+
     static func ref(_ N: UInt, _ rotDeg: RotationDegree,
                     _ target: UnsafeMutablePointer<UInt32>,
-                    _ outWidth:Int)
+                    _ outWidth: Int)
         -> (UInt, UInt) -> UnsafeMutablePointer<UInt32> {
             func refx(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<UInt32> {
                 let I_old = MatrixRotation.getInstance(rotDeg, I, J, N).I_old
@@ -57,4 +62,5 @@ class OutputMatrix {
             }
             return refx
     }
+
 }

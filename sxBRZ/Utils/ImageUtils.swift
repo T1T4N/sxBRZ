@@ -8,8 +8,8 @@
 import Foundation
 
 func createARGBBitmapContext(_ imageRef: CGImage) -> CGContext! {
-    let pixelWidth = imageRef.width;
-    let pixelHeight = imageRef.height;
+    let pixelWidth = imageRef.width
+    let pixelHeight = imageRef.height
     let bitmapBytesPerRow = (pixelWidth * 4)
     let bitmapByteCount = (bitmapBytesPerRow * pixelHeight)
 
@@ -20,8 +20,12 @@ func createARGBBitmapContext(_ imageRef: CGImage) -> CGContext! {
         return nil
     }
     let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
-    let context: CGContext = CGContext(data: bitmapData, width: pixelWidth, height: pixelHeight, bitsPerComponent: 8, bytesPerRow: bitmapBytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)!
-    return context
+    return CGContext(data: bitmapData,
+                     width: pixelWidth, height: pixelHeight,
+                     bitsPerComponent: 8,
+                     bytesPerRow: bitmapBytesPerRow,
+                     space: colorSpace,
+                     bitmapInfo: bitmapInfo.rawValue)!
 }
 
 func manipulatePixel(_ imageRef: CGImage) -> CGImage? {
@@ -61,12 +65,17 @@ func manipulatePixel(_ imageRef: CGImage) -> CGImage? {
             // dataType[offset + 2] = g
             // dataType[offset + 3] = b
 
-            dataType[offset] = (b << 24) | (g << 16) | (r << 8) | a;
+            dataType[offset] = (b << 24) | (g << 16) | (r << 8) | a
         }
     }
     let colorSpace = CGColorSpaceCreateDeviceRGB()
     let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
-    let contextRef = CGContext(data: data, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bitmapBytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+    let contextRef = CGContext(data: data,
+                               width: width, height: height,
+                               bitsPerComponent: 8,
+                               bytesPerRow: bitmapBytesPerRow,
+                               space: colorSpace,
+                               bitmapInfo: bitmapInfo.rawValue)
     let imageRef = contextRef?.makeImage()
     // let imageRef = CGBitmapContextCreateImage(context)
     free(data)
@@ -91,12 +100,12 @@ func getImageData(_ imageRef: CGImage) -> [UInt32] {
         for x in 0 ..< height {
             let offset = 4 * ((width * x) + y)
 
-            let a: UInt32 = UInt32(dataType[offset])
-            let r: UInt32 = UInt32(dataType[offset + 1])
-            let g: UInt32 = UInt32(dataType[offset + 2])
-            let b: UInt32 = UInt32(dataType[offset + 3])
+            let a = UInt32(dataType[offset])
+            let r = UInt32(dataType[offset + 1])
+            let g = UInt32(dataType[offset + 2])
+            let b = UInt32(dataType[offset + 3])
 
-            ret[x * width + y] = (a << 24) | (r << 16) | (g << 8) | b;
+            ret[x * width + y] = (a << 24) | (r << 16) | (g << 8) | b
         }
     }
     free(data)
