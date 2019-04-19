@@ -7,8 +7,7 @@
 
 import Foundation
 
-enum BlendType: UInt8
-{
+enum BlendType: UInt8 {
     case none = 0
     case normal = 1   //a normal indication to blend
     case dominant = 2 //a strong indication to blend
