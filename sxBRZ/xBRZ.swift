@@ -109,49 +109,49 @@ func preProcessCorners(_ colorDistance:ColorDistance.Type, _ ker:Kernel_4x4, _ c
 //template <RotationDegree rotDeg> uint32_t inline get_##x(const Kernel_3x3& ker) { return ker.x; }
 func get_a(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.a
-    case .rot_90:
+    case .rot90:
         return ker.g
-    case .rot_180:
+    case .rot180:
         return ker.i
-    case .rot_270:
+    case .rot270:
         return ker.c
     }
 }
 func get_b(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.b
-    case .rot_90:
+    case .rot90:
         return ker.d
-    case .rot_180:
+    case .rot180:
         return ker.h
-    case .rot_270:
+    case .rot270:
         return ker.f
     }
 }
 func get_c(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.c
-    case .rot_90:
+    case .rot90:
         return ker.a
-    case .rot_180:
+    case .rot180:
         return ker.g
-    case .rot_270:
+    case .rot270:
         return ker.i
     }
 }
 func get_d(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.d
-    case .rot_90:
+    case .rot90:
         return ker.h
-    case .rot_180:
+    case .rot180:
         return ker.f
-    case .rot_270:
+    case .rot270:
         return ker.b
     }
 }
@@ -160,49 +160,49 @@ func get_e(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 { return ker.e 
 
 func get_f(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.f
-    case .rot_90:
+    case .rot90:
         return ker.b
-    case .rot_180:
+    case .rot180:
         return ker.d
-    case .rot_270:
+    case .rot270:
         return ker.h
     }
 }
 func get_g(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.g
-    case .rot_90:
+    case .rot90:
         return ker.i
-    case .rot_180:
+    case .rot180:
         return ker.c
-    case .rot_270:
+    case .rot270:
         return ker.a
     }
 }
 func get_h(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.h
-    case .rot_90:
+    case .rot90:
         return ker.f
-    case .rot_180:
+    case .rot180:
         return ker.b
-    case .rot_270:
+    case .rot270:
         return ker.d
     }
 }
 func get_i(_ rotDeg: RotationDegree, _ ker:Kernel_3x3) -> UInt32 {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return ker.i
-    case .rot_90:
+    case .rot90:
         return ker.c
-    case .rot_180:
+    case .rot180:
         return ker.a
-    case .rot_270:
+    case .rot270:
         return ker.g
     }
 }
@@ -254,13 +254,13 @@ func blendingNeeded(_ b:CUnsignedChar) -> Bool { return b != 0 }
 
 func rotateBlendInfo(_ rotDeg:RotationDegree, _ b:CUnsignedChar) -> CUnsignedChar {
     switch rotDeg {
-    case .rot_0:
+    case .zero:
         return b
-    case .rot_90:
+    case .rot90:
         return ((b << 2) | (b >> 6)) & 0xff
-    case .rot_180:
+    case .rot180:
         return ((b << 4) | (b >> 4)) & 0xff
-    case .rot_270:
+    case .rot270:
         return ((b << 6) | (b >> 2)) & 0xff
     }
 }
@@ -587,13 +587,13 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcP
                     i: ker4.k
                 )
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_0, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.zero, ker3, &out, trgWidth, blend_xy[0], cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_90, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.rot90, ker3, &out, trgWidth, blend_xy[0], cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_180, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.rot180, ker3, &out, trgWidth, blend_xy[0], cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_270, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.rot270, ker3, &out, trgWidth, blend_xy[0], cfg)
             }
             out += scaler.scale
         }
@@ -756,13 +756,13 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ src:
 //                print("\(ker3)\n")
                 
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_0, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
+                    scaler, colorDistance, RotationDegree.zero, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_90, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
+                    scaler, colorDistance, RotationDegree.rot90, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_180, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
+                    scaler, colorDistance, RotationDegree.rot180, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot_270, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
+                    scaler, colorDistance, RotationDegree.rot270, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
             }
             currOffset += scaler.scale
         }

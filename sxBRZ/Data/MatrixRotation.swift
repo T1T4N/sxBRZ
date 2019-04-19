@@ -7,13 +7,14 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
 struct MatrixRotation {
     let I_old:UInt
     let J_old:UInt
     fileprivate static var Instances = [TupleKey:MatrixRotation]();
 
     fileprivate init(_ rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) {
-        if rotDeg == RotationDegree.rot_0 {
+        if rotDeg == RotationDegree.zero {
             self.I_old = I
             self.J_old = J
         } else {
