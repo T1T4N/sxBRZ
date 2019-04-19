@@ -9,35 +9,34 @@ import Foundation
 
 // swiftlint:disable identifier_name
 struct MatrixRotation {
-    let I_old: UInt
-    let J_old: UInt
-    fileprivate static var Instances = [TupleKey:MatrixRotation]();
+    let oldI: UInt
+    let oldJ: UInt
 
-    fileprivate init(_ rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) {
+    fileprivate init(_ rotDeg: RotationDegree,
+                     _ I: UInt, _ J: UInt, _ N: UInt) {
         if rotDeg == RotationDegree.zero {
-            self.I_old = I
-            self.J_old = J
+            self.oldI = I
+            self.oldJ = J
         } else {
             let oldRot = RotationDegree(rawValue: rotDeg.rawValue - 1)!
-            let matRot = MatrixRotation.getInstance(oldRot, I, J, N)
-            self.I_old = N - 1 - matRot.J_old
-            self.J_old =         matRot.I_old
+            let matRot = MatrixRotation.instance(oldRot, I, J, N)
+            self.oldI = N - 1 - matRot.oldJ
+            self.oldJ =         matRot.oldI
         }
     }
 
-    static func getInstance(_ rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) -> MatrixRotation {
+    private static let instance = cache { (key: TupleKey) in
+        return MatrixRotation(key.rotDeg, key.I, key.J, key.N)
+    }
+
+    public static func instance(_ rotDeg: RotationDegree,
+                                _ I: UInt, _ J: UInt, _ N: UInt) -> MatrixRotation {
         let tk = TupleKey(rotDeg: rotDeg, I: I, J: J, N: N)
-        if let instance = MatrixRotation.Instances[tk] {
-            return instance
-        } else {
-            let newInstance = MatrixRotation(rotDeg, I, J, N)
-            MatrixRotation.Instances[tk] = newInstance
-            return newInstance
-        }
+        return instance(tk)
     }
 }
 
-struct TupleKey: Equatable {
+private struct TupleKey: Equatable {
     let rotDeg: RotationDegree
     let I: UInt
     let J: UInt
