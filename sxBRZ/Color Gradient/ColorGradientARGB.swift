@@ -9,7 +9,7 @@ import Foundation
 
 // swiftlint:disable identifier_name
 struct ColorGradientARGB: ColorGradient {
-    static let instance = ColorGradientARGB()
+    static let instance: ColorGradient = ColorGradientARGB()
 
     func alphaGrad(_ M: UInt32, _ N: UInt32,
                    _ pixBack: UInt32, _ pixFront: UInt32) -> UInt32 {

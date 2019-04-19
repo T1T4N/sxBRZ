@@ -9,7 +9,7 @@ import Foundation
 
 // swiftlint:disable identifier_name
 protocol ColorGradient {
-    static var instance: Self { get }
+    static var instance: ColorGradient { get }
 
     func alphaGrad(_ M: UInt32, _ N: UInt32,
                    _ pixBack: UInt32, _ pixFront: UInt32) -> UInt32

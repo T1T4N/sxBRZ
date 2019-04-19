@@ -8,15 +8,21 @@
 import Foundation
 
 protocol Scaler {
-    static var scale: Int { get }
-    static func blendLineShallow(_ col: UInt32, _ out: inout OutputMatrix)
-    static func blendLineShallow(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
-    static func blendLineSteep(_ col: UInt32, _ out: inout OutputMatrix)
-    static func blendLineSteep(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
-    static func blendLineSteepAndShallow(_ col: UInt32, _ out:inout OutputMatrix)
-    static func blendLineSteepAndShallow(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
-    static func blendLineDiagonal(_ col: UInt32, _ out: inout OutputMatrix)
-    static func blendLineDiagonal(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
-    static func blendCorner(_ col: UInt32, _ out: inout OutputMatrix)
-    static func blendCorner(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
+    var gradient: ColorGradient { get }
+    var scale: Int { get }
+
+    func blendLineShallow(_ col: UInt32, _ out: inout OutputMatrix)
+    func blendLineShallow(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
+
+    func blendLineSteep(_ col: UInt32, _ out: inout OutputMatrix)
+    func blendLineSteep(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
+
+    func blendLineSteepAndShallow(_ col: UInt32, _ out:inout OutputMatrix)
+    func blendLineSteepAndShallow(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
+
+    func blendLineDiagonal(_ col: UInt32, _ out: inout OutputMatrix)
+    func blendLineDiagonal(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
+
+    func blendCorner(_ col: UInt32, _ out: inout OutputMatrix)
+    func blendCorner(_ col: UInt32, _ ref: (UInt, UInt) -> UnsafeMutablePointer<UInt32>)
 }

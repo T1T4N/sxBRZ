@@ -267,7 +267,7 @@ func rotateBlendInfo(_ rotDeg:RotationDegree, _ b:CUnsignedChar) -> CUnsignedCha
     let breakIntoDebugger = false
 #endif
 
-func blendPixel(_ scaler: Scaler.Type,
+func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
                 _ ker: Kernel_3x3,
@@ -360,7 +360,7 @@ func blendPixel(_ scaler: Scaler.Type,
     }
 }
 
-func blendPixel(_ scaler: Scaler.Type,
+func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
                 _ ker: Kernel_3x3,
@@ -453,7 +453,7 @@ func blendPixel(_ scaler: Scaler.Type,
     }
 }
 
-func scaleImage(_ scaler: Scaler.Type,
+func scaleImage(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ srcPt: UnsafeMutablePointer<UInt32>,
                 _ trgPt: inout UnsafeMutablePointer<UInt32>,
@@ -618,7 +618,7 @@ func scaleImage(_ scaler: Scaler.Type,
     }
 }
 
-func scaleImage(_ scaler: Scaler.Type,
+func scaleImage(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ src: [UInt32],
                 _ trg: inout [UInt32],
@@ -807,31 +807,31 @@ func scale(_ factor: UInt,
     case .argb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientARGB>.self,
+            return scaleImage(Scaler2x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientARGB>.self,
+            return scaleImage(Scaler3x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientARGB>.self,
+            return scaleImage(Scaler4x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientARGB>.self,
+            return scaleImage(Scaler5x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 6:
-            return scaleImage(Scaler6x<ColorGradientARGB>.self,
+            return scaleImage(Scaler6x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
@@ -842,31 +842,31 @@ func scale(_ factor: UInt,
     case .rgb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientRGB>.self,
+            return scaleImage(Scaler2x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientRGB>.self,
+            return scaleImage(Scaler3x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientRGB>.self,
+            return scaleImage(Scaler4x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientRGB>.self,
+            return scaleImage(Scaler5x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 6:
-            return scaleImage(Scaler6x<ColorGradientRGB>.self,
+            return scaleImage(Scaler6x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
@@ -890,31 +890,31 @@ func scale(_ factor: UInt,
     case .argb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientARGB>.self,
+            return scaleImage(Scaler2x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientARGB>.self,
+            return scaleImage(Scaler3x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientARGB>.self,
+            return scaleImage(Scaler4x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientARGB>.self,
+            return scaleImage(Scaler5x(gradient: ColorGradientARGB.instance),
                               ColorDistanceARGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 6:
-        return scaleImage(Scaler6x<ColorGradientARGB>.self,
+        return scaleImage(Scaler6x(gradient: ColorGradientARGB.instance),
                           ColorDistanceARGB.instance,
                           src, &trg,
                           srcWidth, srcHeight,
@@ -925,31 +925,31 @@ func scale(_ factor: UInt,
     case .rgb:
         switch factor {
         case 2:
-            return scaleImage(Scaler2x<ColorGradientRGB>.self,
+            return scaleImage(Scaler2x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 3:
-            return scaleImage(Scaler3x<ColorGradientRGB>.self,
+            return scaleImage(Scaler3x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 4:
-            return scaleImage(Scaler4x<ColorGradientRGB>.self,
+            return scaleImage(Scaler4x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 5:
-            return scaleImage(Scaler5x<ColorGradientRGB>.self,
+            return scaleImage(Scaler5x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
                               cfg, yFirst, yLast)
         case 6:
-            return scaleImage(Scaler6x<ColorGradientRGB>.self,
+            return scaleImage(Scaler6x(gradient: ColorGradientRGB.instance),
                               ColorDistanceRGB.instance,
                               src, &trg,
                               srcWidth, srcHeight,
@@ -960,7 +960,7 @@ func scale(_ factor: UInt,
     }
 }
 
-func equalColorTest(_ col1:UInt32, _ col2:UInt32,
+func equalColorTest(_ col1: UInt32, _ col2: UInt32,
                     _ colFmt: ColorFormat,
                     _ luminanceWeight: Double,
                     _ equalColorTolerance: Double) -> Bool {
