@@ -10,7 +10,7 @@
 		C8D2B006DB24F87845062688 /* BlendType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */; };
 		C8D2B01CE17DE8969F8FF272 /* DistYCbCrBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B7406BE8CD34DFB3DBB8 /* DistYCbCrBuffer.swift */; };
 		C8D2B06A977CB3215F1EAF55 /* xbrz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BD75057DD131A172F980 /* xbrz.cpp */; };
-		C8D2B0A993E951ED8F452C5E /* Kernel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5071D5228AE7492AC50 /* Kernel.swift */; };
+		C8D2B0A993E951ED8F452C5E /* Kernel4.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5071D5228AE7492AC50 /* Kernel4.swift */; };
 		C8D2B22B9E40501DE7F6DBA2 /* ScalerCfg.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8093CE729318EE91FDB /* ScalerCfg.swift */; };
 		C8D2B2736F841BB3125BA0E5 /* MatrixRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */; };
 		C8D2B3D1F69A0AFF097CB271 /* ColorGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5FD66C44333CB715943 /* ColorGradient.swift */; };
@@ -33,6 +33,7 @@
 		C8D2BE38A429FBC24140023D /* ColorDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BED1545E5085B6E4AA83 /* ColorDistance.swift */; };
 		C8D2BF304BE85986FF03C9F8 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BC29A7E0D531C7B554C1 /* ImageUtils.swift */; };
 		C8D2BF6B648285BF6BDCCB1A /* ObjCtoCPP.mm in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B01137EE518A1F089C57 /* ObjCtoCPP.mm */; };
+		E1065D7B2269E0770004C092 /* Kernel3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7A2269E0770004C092 /* Kernel3.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,7 +59,7 @@
 		C8D2B3F748C7D4A031BBEB5C /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		C8D2B44044436800D21D742C /* Scaler3x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler3x.swift; sourceTree = "<group>"; };
 		C8D2B4468A1C95F43E71139F /* Scaler5x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler5x.swift; sourceTree = "<group>"; };
-		C8D2B5071D5228AE7492AC50 /* Kernel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel.swift; sourceTree = "<group>"; };
+		C8D2B5071D5228AE7492AC50 /* Kernel4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel4.swift; sourceTree = "<group>"; };
 		C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationDegree.swift; sourceTree = "<group>"; };
 		C8D2B5C83B1858189FC69391 /* Scaler4x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler4x.swift; sourceTree = "<group>"; };
 		C8D2B5FD66C44333CB715943 /* ColorGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradient.swift; sourceTree = "<group>"; };
@@ -79,6 +80,7 @@
 		C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradientARGB.swift; sourceTree = "<group>"; };
 		C8D2BF725F319E6009655460 /* ColorFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorFormat.swift; sourceTree = "<group>"; };
 		C8D2BFA90B841DD60C8BE9F3 /* Scaler6x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler6x.swift; sourceTree = "<group>"; };
+		E1065D7A2269E0770004C092 /* Kernel3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kernel3.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,7 +141,8 @@
 				C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */,
 				C8D2BF725F319E6009655460 /* ColorFormat.swift */,
 				C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */,
-				C8D2B5071D5228AE7492AC50 /* Kernel.swift */,
+				C8D2B5071D5228AE7492AC50 /* Kernel4.swift */,
+				E1065D7A2269E0770004C092 /* Kernel3.swift */,
 				C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */,
 			);
 			path = Data;
@@ -297,8 +300,9 @@
 				C8D2BB0D7C80C59132ED9555 /* BlendResult.swift in Sources */,
 				C8D2B006DB24F87845062688 /* BlendType.swift in Sources */,
 				C8D2BE00E89A92AD92849F7C /* ColorFormat.swift in Sources */,
+				E1065D7B2269E0770004C092 /* Kernel3.swift in Sources */,
 				C8D2B9EBB186075376CC26D3 /* RotationDegree.swift in Sources */,
-				C8D2B0A993E951ED8F452C5E /* Kernel.swift in Sources */,
+				C8D2B0A993E951ED8F452C5E /* Kernel4.swift in Sources */,
 				C8D2B563911B5F9A458A792C /* OutputMatrix.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
