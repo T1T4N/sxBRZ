@@ -33,7 +33,6 @@ class OutputMatrix {
     func ref(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<RawPixel> {
         let I_old = MatrixRotation.instance(rotDeg, I, J, N).oldI
         let J_old = MatrixRotation.instance(rotDeg, I, J, N).oldJ
-        //return UnsafeMutablePointer<UInt32>(out) + Int(J_old) + Int(I_old) * outWidth
         return (out + Int(J_old) + Int(I_old) * outWidth)
     }
 

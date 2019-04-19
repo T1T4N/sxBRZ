@@ -8,7 +8,7 @@
 import Foundation
 
 // swiftlint:disable identifier_name
-struct ColorGradientARGB: ColorGradient {
+class ColorGradientARGB: ColorGradient {
     static let instance: ColorGradient = ColorGradientARGB()
 
     func alphaGrad(_ M: UInt32, _ N: UInt32,
@@ -28,9 +28,7 @@ func gradientARGB(_ M: UInt32, _ N: UInt32,
 
     func calcColor(_ colFront: RawPixelColor,
                    _ colBack: RawPixelColor) -> RawPixelColor {
-        return RawPixelColor((
-            RawPixel(colFront) * weightFront +
-                RawPixel(colBack) * weightBack) / weightSum)
+        return RawPixelColor((RawPixel(colFront) * weightFront + RawPixel(colBack) * weightBack) / weightSum)
     }
 
     return RawPixel.from(

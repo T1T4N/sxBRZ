@@ -132,5 +132,5 @@ extension RotationDegree {
             return ker.g
         }
     }
-    
+
 }

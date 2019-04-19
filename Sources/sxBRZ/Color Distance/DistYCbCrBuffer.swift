@@ -18,17 +18,17 @@ func distYCbCr(_ pix1: RawPixel, _ pix2: RawPixel,
 
     //const double coefB = 0.0722; //ITU-R BT.709 conversion
     //const double coefR = 0.2126; //
-    let coefB: Double = 0.0593 //ITU-R BT.2020 conversion
-    let coefR: Double = 0.2627 //
-    let coefG: Double = 1 - coefB - coefR
+    let kB: Double = 0.0593 //ITU-R BT.2020 conversion
+    let kR: Double = 0.2627 //
+    let kG: Double = 1 - kB - kR
 
-    let scaleB: Double = 0.5 / (1 - coefB)
-    let scaleR: Double = 0.5 / (1 - coefR)
+    let scaleB: Double = 0.5 / (1 - kB)
+    let scaleR: Double = 0.5 / (1 - kR)
 
     let y: Double =
-        coefR * Double(rDiff) +
-        coefG * Double(gDiff) +
-        coefB * Double(bDiff) //[!], analog YCbCr!
+        kR * Double(rDiff) +
+        kG * Double(gDiff) +
+        kB * Double(bDiff) //[!], analog YCbCr!
     let c_b: Double = scaleB * (Double(bDiff) - y)
     let c_r: Double = scaleR * (Double(rDiff) - y)
 
@@ -40,7 +40,7 @@ func distYCbCr(_ pix1: RawPixel, _ pix2: RawPixel,
     )
 }
 
-struct DistYCbCrBuffer {
+class DistYCbCrBuffer {
     var buffer: [Float] = .init(repeating: 0.0, count: 256*256*256)
     fileprivate init() {
         //startup time: 114 ms on Intel Core i5 (four cores)

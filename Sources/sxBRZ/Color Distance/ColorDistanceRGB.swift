@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ColorDistanceRGB: ColorDistance {
+class ColorDistanceRGB: ColorDistance {
     static let instance: ColorDistance = ColorDistanceRGB()
 
     func dist(_ pix1: RawPixel, _ pix2: RawPixel, _ luminanceWeight: Double) -> Double {

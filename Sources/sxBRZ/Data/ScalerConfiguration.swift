@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ScalerCfg {
+public struct ScalerConfiguration {
     let luminanceWeight: Double
     let equalColorTolerance: Double
     let dominantDirectionThreshold: Double

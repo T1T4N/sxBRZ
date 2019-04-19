@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ColorDistance {
+protocol ColorDistance: class {
     static var instance: ColorDistance { get }
 
     func dist(_ pix1: RawPixel, _ pix2: RawPixel, _ luminanceWeight: Double) -> Double
