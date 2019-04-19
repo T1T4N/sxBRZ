@@ -34,14 +34,14 @@ func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>,
     fillBlock(&trg, pitch, col, n, n)
 }
 
-func distRGB(_ pix1: UInt32, _ pix2: UInt32) -> Double {
-    let r_diff = Double(Int(pix1.red) - Int(pix2.red))
-    let g_diff = Double(Int(pix1.green) - Int(pix2.green))
-    let b_diff = Double(Int(pix1.blue) - Int(pix2.blue))
-
-    //euclidean RGB distance
-    return sqrt(pow(r_diff, 2) + pow(g_diff, 2) + pow(b_diff, 2))
-}
+//func distRGB(_ pix1: UInt32, _ pix2: UInt32) -> Double {
+//    let r_diff = Double(Int(pix1.red) - Int(pix2.red))
+//    let g_diff = Double(Int(pix1.green) - Int(pix2.green))
+//    let b_diff = Double(Int(pix1.blue) - Int(pix2.blue))
+//
+//    //euclidean RGB distance
+//    return sqrt(pow(r_diff, 2) + pow(g_diff, 2) + pow(b_diff, 2))
+//}
 
 func preProcessCorners(_ colorDistance: ColorDistance,
                        _ ker: Kernel_4x4,
@@ -85,60 +85,7 @@ func preProcessCorners(_ colorDistance: ColorDistance,
     return result
 }
 
-func getTopL(_ b: RawPixelColor) -> BlendType {
-    return BlendType(rawValue: ((0x3 & b) % 3))!
-}
-
-func getTopR(_ b: RawPixelColor) -> BlendType {
-    return BlendType(rawValue: ((0x3 & (b >> 2)) % 3))!
-}
-
-func getBottomR(_ b: RawPixelColor) -> BlendType {
-    return BlendType(rawValue: ((0x3 & (b >> 4)) % 3))!
-}
-
-func getBottomL(_ b: RawPixelColor) -> BlendType {
-    return BlendType(rawValue: ((0x3 & (b >> 6)) % 3))!
-}
-
-//buffer is assumed to be initialized before preprocessing!
-func setTopL(_ b: inout RawPixelColor, _ bt: BlendType) {
-    b |= bt.rawValue
-}
-
-func setTopL(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
-    b[idx] |= bt.rawValue
-}
-
-func setTopR(_ b: inout RawPixelColor, _ bt: BlendType) {
-    b |= (bt.rawValue << 2)
-}
-
-func setTopR(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
-    b[idx] |= (bt.rawValue << 2)
-}
-
-func setBottomR(_ b: inout RawPixelColor, _ bt: BlendType) {
-    b |= (bt.rawValue << 4)
-}
-
-func setBottomR(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
-    b[idx] |= (bt.rawValue << 4)
-}
-
-func setBottomL(_ b: inout RawPixelColor, _ bt: BlendType) {
-    b |= (bt.rawValue << 6)
-}
-
-func setBottomL(_ b: inout [RawPixelColor], _ idx: Int, _ bt: BlendType) {
-    b[idx] |= (bt.rawValue << 6)
-}
-
-func blendingNeeded(_ b: RawPixelColor) -> Bool {
-    return b != 0
-}
-
-func rotateBlendInfo(_ rotDeg:RotationDegree, _ b: RawPixelColor) -> RawPixelColor {
+func rotateBlendInfo(_ rotDeg: RotationDegree, _ b: RawPixelColor) -> RawPixelColor {
     switch rotDeg {
     case .zero:
         return b
@@ -164,7 +111,7 @@ func blendPixel(_ scaler: Scaler,
                 _ blendInfo: CUnsignedChar,
                 _ cfg: ScalerCfg) {
     var blend = rotateBlendInfo(rotDeg, blendInfo)
-    if getBottomR(blend).rawValue >= BlendType.normal.rawValue {
+    if blend.bottomR.rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
             return colorDistance.dist(pix1, pix2, cfg.luminanceWeight) < cfg.equalColorTolerance
         }
@@ -173,16 +120,16 @@ func blendPixel(_ scaler: Scaler,
         }
 
         let doLineBlend:Bool =  {
-            if getBottomR(blend).rawValue >= BlendType.dominant.rawValue {
+            if blend.bottomR.rawValue >= BlendType.dominant.rawValue {
                 return true
             }
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-            if getTopR(blend) != BlendType.none &&
+            if blend.topR != .none &&
                 !eq(rotDeg.getE(for: ker),
                     rotDeg.getG(for: ker)) {
                 return false
             }
-            if getBottomL(blend) != BlendType.none &&
+            if blend.bottomL != .none &&
                 !eq(rotDeg.getE(for: ker),
                     rotDeg.getC(for: ker)) {
                 return false
@@ -248,7 +195,7 @@ func blendPixel(_ scaler: Scaler,
                 _ blendInfo: CUnsignedChar,
                 _ cfg: ScalerCfg) {
     var blend = rotateBlendInfo(rotDeg, blendInfo)
-    if getBottomR(blend).rawValue >= BlendType.normal.rawValue {
+    if blend.bottomR.rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
             return colorDistance.dist(pix1, pix2, cfg.luminanceWeight) < cfg.equalColorTolerance
         }
@@ -257,16 +204,16 @@ func blendPixel(_ scaler: Scaler,
         }
         
         let doLineBlend:Bool =  {
-            if getBottomR(blend).rawValue >= BlendType.dominant.rawValue {
+            if blend.bottomR.rawValue >= BlendType.dominant.rawValue {
                 return true
             }
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-            if getTopR(blend) != BlendType.none &&
+            if blend.topR != .none &&
                 !eq(rotDeg.getE(for: ker),
                     rotDeg.getG(for: ker)) {
                 return false
             }
-            if getBottomL(blend) != BlendType.none &&
+            if blend.bottomL != .none &&
                 !eq(rotDeg.getE(for: ker),
                     rotDeg.getC(for: ker)) {
                 return false
@@ -386,9 +333,9 @@ func scaleImage(_ scaler: Scaler,
              | J | K |
              ---------
              */
-            setTopR(&preProcBuffer, x, res.blendJ)
+            preProcBuffer[x].setTopR(blend: res.blendJ)
             if x+1 < bufferSize {
-                setTopL(&preProcBuffer, x+1, res.blendK)
+                preProcBuffer[x + 1].setTopL(blend: res.blendK)
             }
         }
     }
@@ -439,17 +386,17 @@ func scaleImage(_ scaler: Scaler,
              */
 
             blend_xy[0] = preProcBuffer[x]
-            setBottomR(&blend_xy, 0, res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
+            blend_xy[0].setBottomR(blend: res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
 
-            setTopR(&blend_xy1, 0, res.blendJ) //set 2nd known corner for (x, y + 1)
+            blend_xy1[0].setTopR(blend: res.blendJ) //set 2nd known corner for (x, y + 1)
             preProcBuffer[x] = blend_xy1[0] //store on current buffer position for use on next row
             
             blend_xy1[0] = 0
-            setTopL(&blend_xy1, 0, res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
+            blend_xy1[0].setTopL(blend: res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
 
             if (x + 1 < bufferSize) {
                 //set 3rd known corner for (x + 1, y)
-                setBottomL(&preProcBuffer, x + 1, res.blendG)
+                preProcBuffer[x + 1].setBottomL(blend: res.blendG)
             }
             
             // fill block of size scale * scale with the given color
@@ -457,7 +404,7 @@ func scaleImage(_ scaler: Scaler,
             // fillBlock(out, trgWidth, ker4.f, scaler.scale)
 
             //blend four corners of current pixel
-            if blendingNeeded(blend_xy[0]) { //good 5% perf-improvement
+            if blend_xy[0].blendingNeeded { //good 5% perf-improvement
                 let ker3 = Kernel_3x3(
                     a: ker4.a,
                     b: ker4.b,
@@ -549,9 +496,9 @@ func scaleImage(_ scaler: Scaler,
              | J | K |
              ---------
              */
-            setTopR(&preProcBuffer[x], res.blendJ)
+            preProcBuffer[x].setTopR(blend: res.blendJ)
             if x+1 < bufferSize {
-                setTopL(&preProcBuffer[x+1], res.blendK)
+                preProcBuffer[x+1].setTopL(blend: res.blendK)
             }
         }
     }
@@ -602,17 +549,17 @@ func scaleImage(_ scaler: Scaler,
              */
             
             blend_xy = preProcBuffer[x]
-            setBottomR(&blend_xy, res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
+            blend_xy.setBottomR(blend: res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
             
-            setTopR(&blend_xy1, res.blendJ) //set 2nd known corner for (x, y + 1)
+            blend_xy1.setTopR(blend: res.blendJ) //set 2nd known corner for (x, y + 1)
             preProcBuffer[x] = blend_xy1 //store on current buffer position for use on next row
             
             blend_xy1 = 0
-            setTopL(&blend_xy1, res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
+            blend_xy1.setTopL(blend: res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
             
             if (x + 1 < bufferSize) {
                 //set 3rd known corner for (x + 1, y)
-                setBottomL(&preProcBuffer[x + 1], res.blendG)
+                preProcBuffer[x + 1].setBottomL(blend: res.blendG)
             }
             
             // fill block of size scale * scale with the given color
@@ -625,7 +572,7 @@ func scaleImage(_ scaler: Scaler,
             }
             
             //blend four corners of current pixel
-            if blendingNeeded(blend_xy) { //good 5% perf-improvement
+            if blend_xy.blendingNeeded { //good 5% perf-improvement
                 let ker3 = Kernel_3x3(
                     a: ker4.a,
                     b: ker4.b,

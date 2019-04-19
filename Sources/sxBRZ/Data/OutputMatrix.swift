@@ -11,11 +11,11 @@ import Foundation
 class OutputMatrix {
     let N: UInt
     let rotDeg: RotationDegree
-    let out: UnsafeMutablePointer<UInt32>
+    let out: UnsafeMutablePointer<RawPixel>
     let outWidth: Int
 
     init(_ N: UInt, _ rotDeg: RotationDegree,
-         _ out: inout UnsafeMutablePointer<UInt32>, _ outWidth: Int ) {
+         _ out: inout UnsafeMutablePointer<RawPixel>, _ outWidth: Int ) {
         self.N = N
         self.rotDeg = rotDeg
         self.out = out
@@ -23,14 +23,14 @@ class OutputMatrix {
     }
 
     init(_ N: UInt, _ rotDeg: RotationDegree,
-         out: inout [UInt32], _ currentOffset: Int, _ outWidth: Int ) {
+         out: inout [RawPixel], _ currentOffset: Int, _ outWidth: Int ) {
         self.N = N
         self.rotDeg = rotDeg
-        self.out = UnsafeMutablePointer<UInt32>(mutating: out) + currentOffset
+        self.out = UnsafeMutablePointer<RawPixel>(mutating: out) + currentOffset
         self.outWidth = outWidth
     }
 
-    func ref(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<UInt32> {
+    func ref(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<RawPixel> {
         let I_old = MatrixRotation.getInstance(rotDeg, I, J, N).I_old
         let J_old = MatrixRotation.getInstance(rotDeg, I, J, N).J_old
         //return UnsafeMutablePointer<UInt32>(out) + Int(J_old) + Int(I_old) * outWidth
@@ -38,7 +38,7 @@ class OutputMatrix {
     }
 
     static func ref(_ N: UInt, _ rotDeg: RotationDegree,
-                    _ target: [UInt32],
+                    _ target: [RawPixel],
                     _ currentOffset: Int,
                     _ outWidth: Int)
         -> (UInt, UInt) -> UnsafeMutablePointer<UInt32> {
@@ -52,10 +52,10 @@ class OutputMatrix {
     }
 
     static func ref(_ N: UInt, _ rotDeg: RotationDegree,
-                    _ target: UnsafeMutablePointer<UInt32>,
+                    _ target: UnsafeMutablePointer<RawPixel>,
                     _ outWidth: Int)
-        -> (UInt, UInt) -> UnsafeMutablePointer<UInt32> {
-            func refx(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<UInt32> {
+        -> (UInt, UInt) -> UnsafeMutablePointer<RawPixel> {
+            func refx(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<RawPixel> {
                 let I_old = MatrixRotation.getInstance(rotDeg, I, J, N).I_old
                 let J_old = MatrixRotation.getInstance(rotDeg, I, J, N).J_old
                 return UnsafeMutablePointer<UInt32>(target) + Int(J_old) + (Int(I_old) * outWidth)

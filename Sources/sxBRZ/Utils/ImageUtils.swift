@@ -7,7 +7,7 @@
 
 import Foundation
 
-func createARGBBitmapContext(_ imageRef: CGImage) -> CGContext! {
+private func _createARGBBitmapContext(_ imageRef: CGImage) -> CGContext! {
     let pixelWidth = imageRef.width
     let pixelHeight = imageRef.height
     let bitmapBytesPerRow = (pixelWidth * 4)
@@ -29,21 +29,23 @@ func createARGBBitmapContext(_ imageRef: CGImage) -> CGContext! {
 }
 
 func manipulatePixel(_ imageRef: CGImage) -> CGImage? {
-    let context = createARGBBitmapContext(imageRef)
+    let context = imageRef.createARGBBitmapContext()
     let width = imageRef.width
     let height = imageRef.height
     let rect = CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height))
     let bitmapBytesPerRow = Int(width) * 4
 
     //Clear the context
-    context?.clear(rect)
+    context.clear(rect)
 
     // Draw the image to the bitmap context. Once we draw, the memory
     // allocated for the context for rendering will then contain the
     // raw image data in the specified color space.
-    context?.draw(imageRef, in: rect)
+    context.draw(imageRef, in: rect)
 
-    let data: UnsafeMutableRawPointer = context!.data!
+    guard let data = context.data else { return nil }
+    defer { free(data) }
+
     let dataType = data.assumingMemoryBound(to: UInt32.self)
     // let dataType = UnsafeMutablePointer<UInt32>(data)
     // let dataType = UnsafeMutablePointer<UInt8>(data)
@@ -78,20 +80,22 @@ func manipulatePixel(_ imageRef: CGImage) -> CGImage? {
                                bitmapInfo: bitmapInfo.rawValue)
     let imageRef = contextRef?.makeImage()
     // let imageRef = CGBitmapContextCreateImage(context)
-    free(data)
     return imageRef
 }
 
 func getPixelData(_ imageRef: CGImage) -> [UInt32] {
-    let context = createARGBBitmapContext(imageRef)
+    let context = imageRef.createARGBBitmapContext()
     let width = imageRef.width
     let height = imageRef.height
     let rect = CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height))
 
-    context?.clear(rect)
-    context?.draw(imageRef, in: rect)
+    context.clear(rect)
+    context.draw(imageRef, in: rect)
 
-    let data: UnsafeMutableRawPointer = context!.data!
+    guard let data: UnsafeMutableRawPointer = context.data else {
+        return []
+    }
+    defer { free(data) }
     let dataType = data.assumingMemoryBound(to: UInt8.self)
     // let dataType = UnsafeMutablePointer<UInt8>(data)
     var ret = [UInt32](repeating: 0, count: width * height)
@@ -108,12 +112,15 @@ func getPixelData(_ imageRef: CGImage) -> [UInt32] {
             ret[x * width + y] = (a << 24) | (r << 16) | (g << 8) | b
         }
     }
-    free(data)
     return ret
 }
 
 extension CGImage {
     public func pixelData() -> [RawPixel] {
         return getPixelData(self)
+    }
+
+    public func createARGBBitmapContext() -> CGContext {
+        return _createARGBBitmapContext(self)
     }
 }
