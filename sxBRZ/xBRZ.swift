@@ -87,20 +87,20 @@ func preProcessCorners(_ colorDistance:ColorDistance.Type, _ ker:Kernel_4x4, _ c
     {
         let dominantGradient:Bool = cfg.dominantDirectionThreshold * jg < fk
         if ker.f != ker.g && ker.f != ker.j {
-            result.blend_f = dominantGradient ? BlendType.blend_DOMINANT : BlendType.blend_NORMAL
+            result.blend_f = dominantGradient ? BlendType.dominant : BlendType.normal
         }
         if ker.k != ker.j && ker.k != ker.g {
-            result.blend_k = dominantGradient ? BlendType.blend_DOMINANT : BlendType.blend_NORMAL
+            result.blend_k = dominantGradient ? BlendType.dominant : BlendType.normal
         }
     }
     else if fk < jg
     {
         let dominantGradient:Bool = cfg.dominantDirectionThreshold * fk < jg
         if ker.j != ker.f && ker.j != ker.k {
-            result.blend_j = dominantGradient ? BlendType.blend_DOMINANT : BlendType.blend_NORMAL
+            result.blend_j = dominantGradient ? BlendType.dominant : BlendType.normal
         }
         if ker.g != ker.f && ker.g != ker.k {
-            result.blend_g = dominantGradient ? BlendType.blend_DOMINANT : BlendType.blend_NORMAL
+            result.blend_g = dominantGradient ? BlendType.dominant : BlendType.normal
         }
     }
     return result
@@ -282,7 +282,7 @@ func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotD
     var target = UnsafeMutablePointer<UInt32>(targetPt)
     
     var blend = rotateBlendInfo(rotDeg, blendInfo)
-    if getBottomR(blend).rawValue >= BlendType.blend_NORMAL.rawValue {
+    if getBottomR(blend).rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
             return colorDistance.dist(pix1, pix2, cfg.luminanceWeight) < cfg.equalColorTolerance
         }
@@ -291,16 +291,16 @@ func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotD
         }
 
         let doLineBlend:Bool =  {
-            if getBottomR(blend).rawValue >= BlendType.blend_DOMINANT.rawValue {
+            if getBottomR(blend).rawValue >= BlendType.dominant.rawValue {
                 return true
             }
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-            if getTopR(blend) != BlendType.blend_NONE &&
+            if getTopR(blend) != BlendType.none &&
                 !eq(get_e(rotDeg, ker),
                     get_g(rotDeg, ker)) {
                 return false
             }
-            if getBottomL(blend) != BlendType.blend_NONE &&
+            if getBottomL(blend) != BlendType.none &&
                 !eq(get_e(rotDeg, ker),
                     get_c(rotDeg, ker)) {
                 return false
@@ -367,7 +367,7 @@ func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotD
     //    var i = get_i(rotDeg, &ker)
     
     var blend = rotateBlendInfo(rotDeg, blendInfo)
-    if getBottomR(blend).rawValue >= BlendType.blend_NORMAL.rawValue {
+    if getBottomR(blend).rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
             return colorDistance.dist(pix1, pix2, cfg.luminanceWeight) < cfg.equalColorTolerance
         }
@@ -376,16 +376,16 @@ func blendPixel(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ rotD
         }
         
         let doLineBlend:Bool =  {
-            if getBottomR(blend).rawValue >= BlendType.blend_DOMINANT.rawValue {
+            if getBottomR(blend).rawValue >= BlendType.dominant.rawValue {
                 return true
             }
             //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
-            if getTopR(blend) != BlendType.blend_NONE &&
+            if getTopR(blend) != BlendType.none &&
                 !eq(get_e(rotDeg, ker),
                     get_g(rotDeg, ker)) {
                 return false
             }
-            if getBottomL(blend) != BlendType.blend_NONE &&
+            if getBottomL(blend) != BlendType.none &&
                 !eq(get_e(rotDeg, ker),
                     get_c(rotDeg, ker)) {
                 return false
@@ -458,7 +458,7 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcP
 //    let preProcBuffer:UnsafeMutablePointer<CUnsignedChar> = trgChar - bufferSize
     var preProcBuffer = [CUnsignedChar](repeating: 0, count: bufferSize)
     
-    assert(BlendType.blend_NONE.rawValue == 0, "Blend NONE is not 0")
+    assert(BlendType.none.rawValue == 0, "Blend NONE is not 0")
     //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
     //this cannot be optimized for adjacent processing stripes; we must not allow for a memory race condition!
     if yFirst > 0
@@ -617,7 +617,7 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ src:
     //    let preProcBuffer:UnsafeMutablePointer<CUnsignedChar> = trgChar - bufferSize
     var preProcBuffer = [CUnsignedChar](repeating: 0, count: bufferSize)
     
-    assert(BlendType.blend_NONE.rawValue == 0, "Blend NONE is not 0")
+    assert(BlendType.none.rawValue == 0, "Blend NONE is not 0")
     //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
     //this cannot be optimized for adjacent processing stripes; we must not allow for a memory race condition!
     if yFirst > 0

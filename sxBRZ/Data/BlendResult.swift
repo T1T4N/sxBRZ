@@ -7,11 +7,10 @@
 
 import Foundation
 
-struct BlendResult: CustomStringConvertible
-{
+struct BlendResult: CustomStringConvertible {
     var
-    /**/blend_f:BlendType = BlendType.blend_NONE, blend_g:BlendType = BlendType.blend_NONE,
-    /**/blend_j:BlendType = BlendType.blend_NONE, blend_k:BlendType = BlendType.blend_NONE
+    /**/blend_f:BlendType = BlendType.none, blend_g:BlendType = BlendType.none,
+    /**/blend_j:BlendType = BlendType.none, blend_k:BlendType = BlendType.none
     
     var description: String {
         get {
