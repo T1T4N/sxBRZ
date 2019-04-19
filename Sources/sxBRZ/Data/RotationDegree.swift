@@ -27,7 +27,7 @@ extension RotationDegree: CustomStringConvertible {
 
 extension RotationDegree {
     //template <RotationDegree rotDeg> uint32_t inline get_##x(const Kernel_3x3& ker) { return ker.x; }
-    func getA(for ker: Kernel_3x3) -> UInt32 {
+    func getA(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.a
@@ -40,7 +40,7 @@ extension RotationDegree {
         }
     }
 
-    func getB(for ker: Kernel_3x3) -> UInt32 {
+    func getB(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.b
@@ -53,7 +53,7 @@ extension RotationDegree {
         }
     }
 
-    func getC(for ker: Kernel_3x3) -> UInt32 {
+    func getC(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.c
@@ -66,7 +66,7 @@ extension RotationDegree {
         }
     }
 
-    func getD(for ker: Kernel_3x3) -> UInt32 {
+    func getD(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.d
@@ -79,9 +79,9 @@ extension RotationDegree {
         }
     }
 
-    func getE(for ker: Kernel_3x3) -> UInt32 { return ker.e }
+    func getE(for ker: Kernel3x3) -> UInt32 { return ker.e }
 
-    func getF(for ker: Kernel_3x3) -> UInt32 {
+    func getF(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.f
@@ -94,7 +94,7 @@ extension RotationDegree {
         }
     }
 
-    func getG(for ker: Kernel_3x3) -> UInt32 {
+    func getG(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.g
@@ -107,7 +107,7 @@ extension RotationDegree {
         }
     }
 
-    func getH(for ker: Kernel_3x3) -> UInt32 {
+    func getH(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.h
@@ -120,7 +120,7 @@ extension RotationDegree {
         }
     }
 
-    func getI(for ker: Kernel_3x3) -> UInt32 {
+    func getI(for ker: Kernel3x3) -> UInt32 {
         switch self {
         case .zero:
             return ker.i

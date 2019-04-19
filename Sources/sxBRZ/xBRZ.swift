@@ -44,7 +44,7 @@ func fillBlock(_ trg: inout UnsafeMutablePointer<UInt32>,
 //}
 
 func preProcessCorners(_ colorDistance: ColorDistance,
-                       _ ker: Kernel_4x4,
+                       _ ker: Kernel4x4,
                        _ cfg: ScalerCfg) -> BlendResult {
     //result: F, G, J, K corners of "GradientType"
     var result = BlendResult()
@@ -105,7 +105,7 @@ let breakIntoDebugger = false
 func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
-                _ ker: Kernel_3x3,
+                _ ker: Kernel3x3,
                 _ target: inout UnsafeMutablePointer<UInt32>,
                 _ trgWidth: Int,
                 _ blendInfo: CUnsignedChar,
@@ -188,7 +188,7 @@ func blendPixel(_ scaler: Scaler,
 func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
-                _ ker: Kernel_3x3,
+                _ ker: Kernel3x3,
                 _ target: inout [UInt32],
                 _ currentOffset: Int,
                 _ trgWidth: Int,
@@ -305,7 +305,7 @@ func scaleImage(_ scaler: Scaler,
             let x_p1 = min(x + 1, srcWidth - 1)
             let x_p2 = min(x + 2, srcWidth - 1)
 
-            let ker = Kernel_4x4(
+            let ker = Kernel4x4(
                 a: s_m1[x_m1],
                 b: s_m1[x],
                 c: s_m1[x_p1],
@@ -355,7 +355,7 @@ func scaleImage(_ scaler: Scaler,
             let x_p1 = min(x + 1, srcWidth - 1)
             let x_p2 = min(x + 2, srcWidth - 1)
 
-            let ker4 = Kernel_4x4(
+            let ker4 = Kernel4x4(
                 a: s_m1[x_m1],
                 b: s_m1[x],
                 c: s_m1[x_p1],
@@ -405,7 +405,7 @@ func scaleImage(_ scaler: Scaler,
 
             //blend four corners of current pixel
             if blend_xy[0].blendingNeeded { //good 5% perf-improvement
-                let ker3 = Kernel_3x3(
+                let ker3 = Kernel3x3(
                     a: ker4.a,
                     b: ker4.b,
                     c: ker4.c,
@@ -468,7 +468,7 @@ func scaleImage(_ scaler: Scaler,
             let x_p1 = min(x + 1, srcWidth - 1)
             let x_p2 = min(x + 2, srcWidth - 1)
             
-            let ker = Kernel_4x4(
+            let ker = Kernel4x4(
                 a: src[s_m1 + x_m1],
                 b: src[s_m1 + x],
                 c: src[s_m1 + x_p1],
@@ -518,7 +518,7 @@ func scaleImage(_ scaler: Scaler,
             let x_p1 = min(x + 1, srcWidth - 1)
             let x_p2 = min(x + 2, srcWidth - 1)
             
-            let ker4 = Kernel_4x4(
+            let ker4 = Kernel4x4(
                 a: src[s_m1 + x_m1],
                 b: src[s_m1 + x],
                 c: src[s_m1 + x_p1],
@@ -573,7 +573,7 @@ func scaleImage(_ scaler: Scaler,
             
             //blend four corners of current pixel
             if blend_xy.blendingNeeded { //good 5% perf-improvement
-                let ker3 = Kernel_3x3(
+                let ker3 = Kernel3x3(
                     a: ker4.a,
                     b: ker4.b,
                     c: ker4.c,

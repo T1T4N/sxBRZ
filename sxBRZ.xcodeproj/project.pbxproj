@@ -31,8 +31,8 @@
 		E1D28072226A6EBE005343FD /* BlendType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */; };
 		E1D28073226A6EBE005343FD /* ColorFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2BF725F319E6009655460 /* ColorFormat.swift */; };
 		E1D28074226A6EBE005343FD /* RotationDegree.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */; };
-		E1D28075226A6EBE005343FD /* Kernel4.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5071D5228AE7492AC50 /* Kernel4.swift */; };
-		E1D28076226A6EBE005343FD /* Kernel3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7A2269E0770004C092 /* Kernel3.swift */; };
+		E1D28075226A6EBE005343FD /* Kernel4x4.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B5071D5228AE7492AC50 /* Kernel4x4.swift */; };
+		E1D28076226A6EBE005343FD /* Kernel3x3.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1065D7A2269E0770004C092 /* Kernel3x3.swift */; };
 		E1D28077226A6EBE005343FD /* OutputMatrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */; };
 		E1D28079226A6F51005343FD /* sxBRZ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1D28056226A6E52005343FD /* sxBRZ.framework */; };
 /* End PBXBuildFile section */
@@ -67,7 +67,7 @@
 		C8D2B391CFB88D60024FE596 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C8D2B44044436800D21D742C /* Scaler3x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler3x.swift; sourceTree = "<group>"; };
 		C8D2B4468A1C95F43E71139F /* Scaler5x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler5x.swift; sourceTree = "<group>"; };
-		C8D2B5071D5228AE7492AC50 /* Kernel4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel4.swift; sourceTree = "<group>"; };
+		C8D2B5071D5228AE7492AC50 /* Kernel4x4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Kernel4x4.swift; sourceTree = "<group>"; };
 		C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationDegree.swift; sourceTree = "<group>"; };
 		C8D2B5C83B1858189FC69391 /* Scaler4x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler4x.swift; sourceTree = "<group>"; };
 		C8D2B5FD66C44333CB715943 /* ColorGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradient.swift; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 		C8D2BF29A1DB400B22D4C8B5 /* ColorGradientARGB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorGradientARGB.swift; sourceTree = "<group>"; };
 		C8D2BF725F319E6009655460 /* ColorFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorFormat.swift; sourceTree = "<group>"; };
 		C8D2BFA90B841DD60C8BE9F3 /* Scaler6x.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaler6x.swift; sourceTree = "<group>"; };
-		E1065D7A2269E0770004C092 /* Kernel3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kernel3.swift; sourceTree = "<group>"; };
+		E1065D7A2269E0770004C092 /* Kernel3x3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kernel3x3.swift; sourceTree = "<group>"; };
 		E1065D7C2269EFCF0004C092 /* Pixels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pixels.swift; sourceTree = "<group>"; };
 		E1D2804C226A6DCF005343FD /* xbrz.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xbrz.h; sourceTree = "<group>"; };
 		E1D2804D226A6DCF005343FD /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 				C8D2BEB9750EAE1D49532F1F /* BlendResult.swift */,
 				C8D2B8E19FA0CB57D8907F0E /* BlendType.swift */,
 				C8D2BF725F319E6009655460 /* ColorFormat.swift */,
-				E1065D7A2269E0770004C092 /* Kernel3.swift */,
-				C8D2B5071D5228AE7492AC50 /* Kernel4.swift */,
+				E1065D7A2269E0770004C092 /* Kernel3x3.swift */,
+				C8D2B5071D5228AE7492AC50 /* Kernel4x4.swift */,
 				C8D2BB740D40AD71E7B7F89F /* MatrixRotation.swift */,
 				C8D2B33DE0826B67FB04A508 /* OutputMatrix.swift */,
 				C8D2B5B72CB29269543D4D5D /* RotationDegree.swift */,
@@ -423,13 +423,13 @@
 				E1D28074226A6EBE005343FD /* RotationDegree.swift in Sources */,
 				E1D28065226A6EA7005343FD /* Scaler6x.swift in Sources */,
 				E1D2806D226A6EB8005343FD /* ImageUtils.swift in Sources */,
-				E1D28075226A6EBE005343FD /* Kernel4.swift in Sources */,
+				E1D28075226A6EBE005343FD /* Kernel4x4.swift in Sources */,
 				E1D28069226A6EAD005343FD /* DistYCbCrBuffer.swift in Sources */,
 				E1D28067226A6EAD005343FD /* ColorDistanceRGB.swift in Sources */,
 				E1D28062226A6EA7005343FD /* Scaler3x.swift in Sources */,
 				E1D2806E226A6EB8005343FD /* Pixels.swift in Sources */,
 				E1D28073226A6EBE005343FD /* ColorFormat.swift in Sources */,
-				E1D28076226A6EBE005343FD /* Kernel3.swift in Sources */,
+				E1D28076226A6EBE005343FD /* Kernel3x3.swift in Sources */,
 				E1D2806C226A6EB3005343FD /* ColorGradientARGB.swift in Sources */,
 				E1D28063226A6EA7005343FD /* Scaler4x.swift in Sources */,
 				E1D28061226A6EA7005343FD /* Scaler2x.swift in Sources */,

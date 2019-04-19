@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct Kernel_3x3 {
+struct Kernel3x3 {
     let
     a: UInt32, b: UInt32, c: UInt32,
     d: UInt32, e: UInt32, f: UInt32,
     g: UInt32, h: UInt32, i: UInt32
 }
 
-extension Kernel_3x3: CustomStringConvertible {
+extension Kernel3x3: CustomStringConvertible {
     var description: String {
         return String(format: "%d %d %d %d %d %d %d %d %d",
                       self.a, self.b, self.c,
