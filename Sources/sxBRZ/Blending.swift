@@ -10,13 +10,13 @@ import Foundation
 func byteAdvance(_ ptr: UnsafeMutablePointer<RawPixel>, _ bytes: Int)
     -> UnsafeMutablePointer<RawPixel> {
         let tmpPtr = UnsafeMutableRawPointer(ptr)
-            .assumingMemoryBound(to: CUnsignedChar.self)
+            .assumingMemoryBound(to: RawPixelColor.self)
         return UnsafeMutableRawPointer(tmpPtr + bytes)
-            .assumingMemoryBound(to: UInt32.self)
+            .assumingMemoryBound(to: RawPixel.self)
 }
 
 // Fill block  with the given color
-func fillBlock(_ trgPtr: inout UnsafeMutablePointer<UInt32>,
+func fillBlock(_ trgPtr: inout UnsafeMutablePointer<RawPixel>,
                _ pitch: Int, _ col: UInt32,
                _ blockWidth: Int, _ blockHeight: Int) {
     for _ in 0..<blockHeight {
@@ -27,7 +27,7 @@ func fillBlock(_ trgPtr: inout UnsafeMutablePointer<UInt32>,
     }
 }
 
-func fillBlock(_ trgPtr: inout UnsafeMutablePointer<UInt32>,
+func fillBlock(_ trgPtr: inout UnsafeMutablePointer<RawPixel>,
                _ pitch: Int, _ col: UInt32, _ n: Int) {
     fillBlock(&trgPtr, pitch, col, n, n)
 }
@@ -99,9 +99,9 @@ func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
                 _ ker: Kernel3x3,
-                _ target: inout UnsafeMutablePointer<UInt32>,
+                _ target: inout UnsafeMutablePointer<RawPixel>,
                 _ trgWidth: Int,
-                _ blendInfo: CUnsignedChar,
+                _ blendInfo: RawPixelColor,
                 _ cfg: ScalerConfiguration) {
     let blend = blendInfo.rotateBlendInfo(rotDeg)
     if blend.bottomR.rawValue >= BlendType.normal.rawValue {
@@ -149,7 +149,7 @@ func blendPixel(_ scaler: Scaler,
         }()
 
         //choose most similar color
-        let px: UInt32 =
+        let px: RawPixel =
             dist(rotDeg.getE(for: ker),
                  rotDeg.getF(for: ker)) <= dist(rotDeg.getE(for: ker),
                                                 rotDeg.getH(for: ker)) ?
@@ -243,7 +243,7 @@ func blendPixel(_ scaler: Scaler,
         }()
 
         //choose most similar color
-        let px: UInt32 =
+        let px: RawPixel =
             dist(rotDeg.getE(for: ker),
                  rotDeg.getF(for: ker)) <= dist(rotDeg.getE(for: ker),
                                                 rotDeg.getH(for: ker)) ?

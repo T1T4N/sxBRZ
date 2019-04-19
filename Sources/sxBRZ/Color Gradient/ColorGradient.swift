@@ -12,7 +12,7 @@ protocol ColorGradient: class {
     static var instance: ColorGradient { get }
 
     func alphaGrad(_ M: UInt32, _ N: UInt32,
-                   _ pixBack: RawPixel, _ pixFront: RawPixel) -> UInt32
+                   _ pixBack: RawPixel, _ pixFront: RawPixel) -> RawPixel
 }
 
 extension ColorGradient {

@@ -82,14 +82,14 @@ func scaleImage(_ scaler: Scaler,
     }
     //------------------------------------------------------------------------------------
     for y in yFirst..<yLast {
-        var out:UnsafeMutablePointer<UInt32> = trg + scaler.scale * y * trgWidth
+        var out: UnsafeMutablePointer<RawPixel> = trg + scaler.scale * y * trgWidth
 
-        let s_m1:UnsafeMutablePointer<UInt32> = src + srcWidth * max(y - 1, 0)
-        let s_0:UnsafeMutablePointer<UInt32>  = src + srcWidth * y
-        let s_p1:UnsafeMutablePointer<UInt32> = src + srcWidth * min(y + 1, srcHeight - 1)
-        let s_p2:UnsafeMutablePointer<UInt32> = src + srcWidth * min(y + 2, srcHeight - 1)
+        let s_m1: UnsafeMutablePointer<RawPixel> = src + srcWidth * max(y - 1, 0)
+        let s_0: UnsafeMutablePointer<RawPixel>  = src + srcWidth * y
+        let s_p1: UnsafeMutablePointer<RawPixel> = src + srcWidth * min(y + 1, srcHeight - 1)
+        let s_p2: UnsafeMutablePointer<RawPixel> = src + srcWidth * min(y + 2, srcHeight - 1)
 
-        var blend_xy1 = [CUnsignedChar](repeating: 0, count: 1)
+        var blend_xy1 = [RawPixelColor](repeating: 0, count: 1)
         for x in 0..<srcWidth {
             //all those bounds checks have only insignificant impact on performance!
             let x_m1 = max(x - 1, 0)
@@ -115,7 +115,7 @@ func scaleImage(_ scaler: Scaler,
                 p: s_p2[x_p2]
             )
             //            let blend_xyPtr = UnsafeMutablePointer<CUnsignedChar>([0]) //for current (x, y) position
-            var blend_xy = [CUnsignedChar](repeating: 0, count: 1)
+            var blend_xy = [RawPixelColor](repeating: 0, count: 1)
             let res = preProcessCorners(colorDistance, ker4, cfg) // res is identical
             /*
              preprocessing blend result:
@@ -141,7 +141,7 @@ func scaleImage(_ scaler: Scaler,
             }
 
             // fill block of size scale * scale with the given color
-            fillBlock(&out, trgWidth * MemoryLayout<UInt32>.size, ker4.f, scaler.scale) //place *after* preprocessing step, to not overwrite the results while processing the the last pixel!
+            fillBlock(&out, trgWidth * MemoryLayout<RawPixel>.size, ker4.f, scaler.scale) //place *after* preprocessing step, to not overwrite the results while processing the the last pixel!
             // fillBlock(out, trgWidth, ker4.f, scaler.scale)
 
             //blend four corners of current pixel
@@ -173,8 +173,8 @@ func scaleImage(_ scaler: Scaler,
 
 func scaleImage(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
-                _ src: [UInt32],
-                _ trg: inout [UInt32],
+                _ src: [RawPixel],
+                _ trg: inout [RawPixel],
                 _ srcWidth: Int, _ srcHeight: Int,
                 _ cfg: ScalerConfiguration,
                 _ yFirst: Int, _ yLast: Int) {
@@ -191,13 +191,13 @@ func scaleImage(_ scaler: Scaler,
 
     //    let trgChar = UnsafeMutablePointer<CUnsignedChar>(trg + yLast * scaler.scale * trgWidth)
     //    let preProcBuffer:UnsafeMutablePointer<CUnsignedChar> = trgChar - bufferSize
-    var preProcBuffer = [CUnsignedChar](repeating: 0, count: bufferSize)
+    var preProcBuffer = [RawPixelColor](repeating: 0, count: bufferSize)
 
     assert(BlendType.none.rawValue == 0, "Blend NONE is not 0")
     //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
     //this cannot be optimized for adjacent processing stripes; we must not allow for a memory race condition!
     if yFirst > 0 {
-        let y:Int = yFirst - 1
+        let y: Int = yFirst - 1
 
         let s_m1 = srcWidth * max(y - 1, 0)
         let s_0  = srcWidth * y
@@ -252,7 +252,7 @@ func scaleImage(_ scaler: Scaler,
         let s_p1 = srcWidth * min(y + 1, srcHeight - 1)
         let s_p2 = srcWidth * min(y + 2, srcHeight - 1)
 
-        var blend_xy1:CUnsignedChar = 0
+        var blend_xy1: RawPixelColor = 0
         for x in 0..<srcWidth {
             //all those bounds checks have only insignificant impact on performance!
             let x_m1 = max(x - 1, 0)
@@ -278,7 +278,7 @@ func scaleImage(_ scaler: Scaler,
                 p: src[s_p2 + x_p2]
             )
             //            let blend_xyPtr = UnsafeMutablePointer<CUnsignedChar>([0]) //for current (x, y) position
-            var blend_xy:CUnsignedChar = 0
+            var blend_xy: RawPixelColor = 0
             let res = preProcessCorners(colorDistance, ker4, cfg) // res is identical
             /*
              preprocessing blend result:
@@ -341,55 +341,38 @@ func scaleImage(_ scaler: Scaler,
             }
             currOffset += scaler.scale
         }
-        //        print("\(y)")
-        //        for z in 0..<bufferSize {
-        //            print(preProcBuffer[z], separator: " ", terminator: " ")
-        //        }
-        //        print("\n")
+    }
+}
+
+private struct TupleKey: Hashable {
+    let factor: UInt
+    let format: ColorFormat
+}
+
+private let scalerInstance = cache { (key: TupleKey) -> Scaler in
+    let gradient = key.format.gradient
+    switch key.factor {
+    case 2: return Scaler2x(gradient: gradient)
+    case 3: return Scaler3x(gradient: gradient)
+    case 4: return Scaler4x(gradient: gradient)
+    case 5: return Scaler5x(gradient: gradient)
+    case 6: return Scaler6x(gradient: gradient)
+    default: fatalError("Unsupported scaling factor")
     }
 }
 
 public func scale(_ factor: UInt,
-                  _ src: UnsafeMutablePointer<UInt32>,
-                  _ trg: inout UnsafeMutablePointer<UInt32>,
+                  _ src: UnsafeMutablePointer<RawPixel>,
+                  _ trg: inout UnsafeMutablePointer<RawPixel>,
                   _ srcWidth: Int, _ srcHeight: Int,
                   _ colFmt: ColorFormat,
                   _ cfg: ScalerConfiguration,
                   _ yFirst: Int = 0, _ yLast: Int = .max) {
-    switch factor {
-    case 2:
-        return scaleImage(Scaler2x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 3:
-        return scaleImage(Scaler3x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 4:
-        return scaleImage(Scaler4x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 5:
-        return scaleImage(Scaler5x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 6:
-        return scaleImage(Scaler6x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    default:
-        return
-    }
+    return scaleImage(scalerInstance(TupleKey(factor: factor, format: colFmt)),
+                      colFmt.distance,
+                      src, &trg,
+                      srcWidth, srcHeight,
+                      cfg, yFirst, yLast)
 }
 
 public func scale(_ factor: UInt,
@@ -401,38 +384,9 @@ public func scale(_ factor: UInt,
                   _ cfg: ScalerConfiguration,
                   _ yFirst: Int = 0,
                   _ yLast: Int = .max) {
-    switch factor {
-    case 2:
-        return scaleImage(Scaler2x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 3:
-        return scaleImage(Scaler3x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 4:
-        return scaleImage(Scaler4x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 5:
-        return scaleImage(Scaler5x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    case 6:
-        return scaleImage(Scaler6x(gradient: colFmt.gradient),
-                          colFmt.distance,
-                          src, &trg,
-                          srcWidth, srcHeight,
-                          cfg, yFirst, yLast)
-    default:
-        return
-    }
+    return scaleImage(scalerInstance(TupleKey(factor: factor, format: colFmt)),
+                      colFmt.distance,
+                      src, &trg,
+                      srcWidth, srcHeight,
+                      cfg, yFirst, yLast)
 }

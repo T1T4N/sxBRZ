@@ -12,6 +12,8 @@ public enum ColorFormat {
     case argb
 }
 
+extension ColorFormat: Hashable { }
+
 extension ColorFormat {
     var gradient: ColorGradient {
         switch self {

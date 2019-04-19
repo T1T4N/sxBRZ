@@ -40,11 +40,11 @@ class OutputMatrix {
                     _ target: [RawPixel],
                     _ currentOffset: Int,
                     _ outWidth: Int)
-        -> (UInt, UInt) -> UnsafeMutablePointer<UInt32> {
-            func refx(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<UInt32> {
+        -> (UInt, UInt) -> UnsafeMutablePointer<RawPixel> {
+            func refx(_ I: UInt, _ J: UInt) -> UnsafeMutablePointer<RawPixel> {
                 let I_old = MatrixRotation.instance(rotDeg, I, J, N).oldI
                 let J_old = MatrixRotation.instance(rotDeg, I, J, N).oldJ
-                return UnsafeMutablePointer<UInt32>(mutating: target) +
+                return UnsafeMutablePointer<RawPixel>(mutating: target) +
                     currentOffset + Int(J_old) + Int(I_old) * outWidth
             }
             return refx
