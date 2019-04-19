@@ -10,10 +10,10 @@ import Foundation
 struct MatrixRotation {
     let I_old:UInt
     let J_old:UInt
-    private static var Instances = [TupleKey:MatrixRotation]();
+    fileprivate static var Instances = [TupleKey:MatrixRotation]();
 
-    private init(_ rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) {
-        if rotDeg == RotationDegree.ROT_0 {
+    fileprivate init(_ rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) {
+        if rotDeg == RotationDegree.rot_0 {
             self.I_old = I
             self.J_old = J
         } else {
@@ -24,8 +24,8 @@ struct MatrixRotation {
         }
     }
 
-    static func getInstance(rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) -> MatrixRotation {
-        let tk = TupleKey(rotDeg, I, J, N)
+    static func getInstance(_ rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) -> MatrixRotation {
+        let tk = TupleKey(rotDeg: rotDeg, I: I, J: J, N: N)
         if let instance = MatrixRotation.Instances[tk] {
             return instance
         } else {
@@ -36,25 +36,18 @@ struct MatrixRotation {
     }
 }
 
-struct TupleKey : Hashable {
+struct TupleKey: Equatable {
     let rotDeg: RotationDegree
     let I: UInt
     let J: UInt
     let N: UInt
-    init( _ rotDeg: RotationDegree, _ I: UInt, _ J: UInt, _ N: UInt) {
-        self.rotDeg = rotDeg
-        self.I = I
-        self.J = J
-        self.N = N
-    }
-    var hashValue: Int {
-        return self.rotDeg.rawValue * Int(2*self.I) * Int(3*self.J) * Int(4*self.N)
-    }
 }
 
-func ==(lhs: TupleKey, rhs: TupleKey) -> Bool {
-    return lhs.rotDeg == rhs.rotDeg &&
-            lhs.I == rhs.I &&
-            lhs.J == rhs.J &&
-            lhs.N == rhs.N
+extension TupleKey: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.rotDeg.rawValue)
+        hasher.combine(self.I)
+        hasher.combine(self.J)
+        hasher.combine(self.N)
+    }
 }

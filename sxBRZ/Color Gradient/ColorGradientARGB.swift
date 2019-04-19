@@ -8,18 +8,18 @@
 import Foundation
 
 struct ColorGradientARGB: ColorGradient {
-    static func alphaGrad(M: UInt32, _ N: UInt32, _ pixBack: UInt32, _ pixFront: UInt32) -> UInt32{
+    static func alphaGrad(_ M: UInt32, _ N: UInt32, _ pixBack: UInt32, _ pixFront: UInt32) -> UInt32{
         return gradientARGB(M, N, pixFront, pixBack)
     }
-    static func alphaGrad(M: UInt32, _ N: UInt32, inout _ pixBack: UInt32, _ pixFront: UInt32) {
+    static func alphaGrad(_ M: UInt32, _ N: UInt32, _ pixBack: inout UInt32, _ pixFront: UInt32) {
         pixBack = gradientARGB(M, N, pixFront, pixBack)
     }
-    static func alphaGrad(M: UInt32, _ N: UInt32, pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
+    static func alphaGrad(_ M: UInt32, _ N: UInt32, pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
         pixBack[0] = gradientARGB(M, N, pixFront, pixBack[0])
     }
 }
 
-func gradientARGB(M: UInt32, _ N: UInt32, _ pixFront: UInt32, _ pixBack: UInt32) -> UInt32 {
+func gradientARGB(_ M: UInt32, _ N: UInt32, _ pixFront: UInt32, _ pixBack: UInt32) -> UInt32 {
     assert(0 < M && M < N && N <= 1000, "")
     
     var weightFront:UInt32 = UInt32(getAlpha(pixFront)) * M
@@ -29,7 +29,7 @@ func gradientARGB(M: UInt32, _ N: UInt32, _ pixFront: UInt32, _ pixBack: UInt32)
         return 0;
     }
     
-    func calcColor(colFront: CUnsignedChar, _ colBack: CUnsignedChar) -> CUnsignedChar {
+    func calcColor(_ colFront: CUnsignedChar, _ colBack: CUnsignedChar) -> CUnsignedChar {
         return CUnsignedChar((UInt32(colFront) * weightFront + UInt32(colBack) * weightBack) / weightSum);
     }
     return makePixel(

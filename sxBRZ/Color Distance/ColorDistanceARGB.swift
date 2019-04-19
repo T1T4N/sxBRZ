@@ -8,7 +8,7 @@
 import Foundation
 
 struct ColorDistanceARGB: ColorDistance {
-    static func dist(pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double {
+    static func dist(_ pix1: UInt32, _ pix2: UInt32, _ luminanceWeight: Double) -> Double {
         let a1 = Double(getAlpha(pix1)) / 255.0
         let a2 = Double(getAlpha(pix2)) / 255.0
         /*

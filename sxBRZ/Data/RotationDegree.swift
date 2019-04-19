@@ -8,17 +8,17 @@
 import Foundation
 
 enum RotationDegree : Int, CustomStringConvertible {
-    case ROT_0 = 0
-    case ROT_90 = 1
-    case ROT_180 = 2
-    case ROT_270 = 3
+    case rot_0 = 0
+    case rot_90 = 1
+    case rot_180 = 2
+    case rot_270 = 3
     
     var description : String {
         switch self {
-        case .ROT_0: return "ROT_0";
-        case .ROT_90: return "ROT_90";
-        case .ROT_180: return "ROT_180";
-        case .ROT_270: return "ROT_270";
+        case .rot_0: return "ROT_0";
+        case .rot_90: return "ROT_90";
+        case .rot_180: return "ROT_180";
+        case .rot_270: return "ROT_270";
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-func distYCbCr(pix1: UInt32, _ pix2: UInt32, _ lumaWeight: Double = 1.0) -> Double
+func distYCbCr(_ pix1: UInt32, _ pix2: UInt32, _ lumaWeight: Double = 1.0) -> Double
 {
     //http://en.wikipedia.org/wiki/YCbCr#ITU-R_BT.601_conversion
     //YCbCr conversion is a matrix multiplication => take advantage of linearity by subtracting first!
@@ -34,8 +34,8 @@ func distYCbCr(pix1: UInt32, _ pix2: UInt32, _ lumaWeight: Double = 1.0) -> Doub
 
 struct DistYCbCrBuffer {
     var buffer: [Float]
-    private init() {
-        buffer = [Float](count: 256*256*256, repeatedValue: 0.0)
+    fileprivate init() {
+        buffer = [Float](repeating: 0.0, count: 256*256*256)
         for i:UInt32 in 0 ..< 256 * 256 * 256 //startup time: 114 ms on Intel Core i5 (four cores)
         {
             let r_diff = Int(getByte(2, val: i)) * 2 - 255
@@ -57,7 +57,7 @@ struct DistYCbCrBuffer {
         }
     }
     
-    func distImpl(pix1: UInt32, _ pix2: UInt32) -> Double
+    func distImpl(_ pix1: UInt32, _ pix2: UInt32) -> Double
     {
         //if (pix1 == pix2) -> 8% perf degradation!
         //    return 0;
@@ -73,7 +73,7 @@ struct DistYCbCrBuffer {
         return Double(buffer[buff_idx])
     }
     static let inst = DistYCbCrBuffer()
-    static func dist(pix1:UInt32, _ pix2:UInt32) -> Double
+    static func dist(_ pix1:UInt32, _ pix2:UInt32) -> Double
     {
         return inst.distImpl(pix1, pix2)
     }

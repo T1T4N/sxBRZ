@@ -7,40 +7,41 @@
 
 import Foundation
 
-func createARGBBitmapContext(imageRef: CGImageRef) -> CGContextRef! {
-    let pixelWidth = CGImageGetWidth(imageRef);
-    let pixelHeight = CGImageGetHeight(imageRef);
+func createARGBBitmapContext(_ imageRef: CGImage) -> CGContext! {
+    let pixelWidth = imageRef.width;
+    let pixelHeight = imageRef.height;
     let bitmapBytesPerRow = (pixelWidth * 4)
     let bitmapByteCount = (bitmapBytesPerRow * pixelHeight)
 
-    let colorSpace: CGColorSpace = CGColorSpaceCreateDeviceRGB()!
+    let colorSpace: CGColorSpace = CGColorSpaceCreateDeviceRGB()
 
-    let bitmapData: UnsafeMutablePointer<Void> = malloc(bitmapByteCount)
+    let bitmapData: UnsafeMutableRawPointer? = malloc(bitmapByteCount)
     if bitmapData == nil {
         return nil
     }
-    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
-    let context: CGContextRef = CGBitmapContextCreate(bitmapData, pixelWidth, pixelHeight, 8, bitmapBytesPerRow, colorSpace, bitmapInfo.rawValue)!
+    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
+    let context: CGContext = CGContext(data: bitmapData, width: pixelWidth, height: pixelHeight, bitsPerComponent: 8, bytesPerRow: bitmapBytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)!
     return context
 }
 
-func manipulatePixel(imageRef: CGImageRef) -> CGImageRef? {
+func manipulatePixel(_ imageRef: CGImage) -> CGImage? {
     let context = createARGBBitmapContext(imageRef)
-    let width = CGImageGetWidth(imageRef)
-    let height = CGImageGetHeight(imageRef)
-    let rect = CGRectMake(0, 0, CGFloat(width), CGFloat(height))
+    let width = imageRef.width
+    let height = imageRef.height
+    let rect = CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height))
     let bitmapBytesPerRow = Int(width) * 4
 
     //Clear the context
-    CGContextClearRect(context, rect)
+    context?.clear(rect)
 
     // Draw the image to the bitmap context. Once we draw, the memory
     // allocated for the context for rendering will then contain the
     // raw image data in the specified color space.
-    CGContextDrawImage(context, rect, imageRef)
+    context?.draw(imageRef, in: rect)
 
-    let data: UnsafeMutablePointer<Void> = CGBitmapContextGetData(context)
-    let dataType = UnsafeMutablePointer<UInt32>(data)
+    let data: UnsafeMutableRawPointer = context!.data!
+    let dataType = data.assumingMemoryBound(to: UInt32.self)
+    // let dataType = UnsafeMutablePointer<UInt32>(data)
     // let dataType = UnsafeMutablePointer<UInt8>(data)
 
     for y in 0 ..< width {
@@ -64,26 +65,27 @@ func manipulatePixel(imageRef: CGImageRef) -> CGImageRef? {
         }
     }
     let colorSpace = CGColorSpaceCreateDeviceRGB()
-    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue)
-    let contextRef = CGBitmapContextCreate(data, width, height, 8, bitmapBytesPerRow, colorSpace, bitmapInfo.rawValue)
-    let imageRef = CGBitmapContextCreateImage(contextRef)
+    let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
+    let contextRef = CGContext(data: data, width: width, height: height, bitsPerComponent: 8, bytesPerRow: bitmapBytesPerRow, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+    let imageRef = contextRef?.makeImage()
     // let imageRef = CGBitmapContextCreateImage(context)
     free(data)
     return imageRef
 }
 
-func getImageData(imageRef: CGImageRef) -> [UInt32] {
+func getImageData(_ imageRef: CGImage) -> [UInt32] {
     let context = createARGBBitmapContext(imageRef)
-    let width = CGImageGetWidth(imageRef)
-    let height = CGImageGetHeight(imageRef)
-    let rect = CGRectMake(0, 0, CGFloat(width), CGFloat(height))
+    let width = imageRef.width
+    let height = imageRef.height
+    let rect = CGRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height))
 
-    CGContextClearRect(context, rect)
-    CGContextDrawImage(context, rect, imageRef)
+    context?.clear(rect)
+    context?.draw(imageRef, in: rect)
 
-    let data: UnsafeMutablePointer<Void> = CGBitmapContextGetData(context)
-    let dataType = UnsafeMutablePointer<UInt8>(data)
-    var ret = [UInt32](count: width * height, repeatedValue: 0)
+    let data: UnsafeMutableRawPointer = context!.data!
+    let dataType = data.assumingMemoryBound(to: UInt8.self)
+    // let dataType = UnsafeMutablePointer<UInt8>(data)
+    var ret = [UInt32](repeating: 0, count: width * height)
 
     for y in 0 ..< width {
         for x in 0 ..< height {

@@ -9,9 +9,9 @@ import Foundation
 
 enum BlendType: UInt8
 {
-    case BLEND_NONE = 0
-    case BLEND_NORMAL = 1   //a normal indication to blend
-    case BLEND_DOMINANT = 2 //a strong indication to blend
+    case blend_NONE = 0
+    case blend_NORMAL = 1   //a normal indication to blend
+    case blend_DOMINANT = 2 //a strong indication to blend
 //    case BLEND_UNDEFINED
     //attention: BlendType must fit into the value range of 2 bit!!!
 }

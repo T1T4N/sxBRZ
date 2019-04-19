@@ -8,21 +8,21 @@
 import Foundation
 
 struct ColorGradientRGB: ColorGradient {
-    static func alphaGrad(M: UInt32, _ N: UInt32, _ pixBack: UInt32, _ pixFront: UInt32) -> UInt32 {
+    static func alphaGrad(_ M: UInt32, _ N: UInt32, _ pixBack: UInt32, _ pixFront: UInt32) -> UInt32 {
         return gradientRGB(M, N, pixFront, pixBack)
     }
-    static func alphaGrad(M: UInt32, _ N: UInt32, inout _ pixBack: UInt32, _ pixFront: UInt32) {
+    static func alphaGrad(_ M: UInt32, _ N: UInt32, _ pixBack: inout UInt32, _ pixFront: UInt32) {
         pixBack = gradientRGB(M, N, pixFront, pixBack)
     }
-    static func alphaGrad(M: UInt32, _ N: UInt32, pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
+    static func alphaGrad(_ M: UInt32, _ N: UInt32, pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
         pixBack[0] = gradientRGB(M, N, pixFront, pixBack[0])
     }
 }
 
-func gradientRGB(M: UInt32, _ N: UInt32, _ pixFront: UInt32, _ pixBack: UInt32) -> UInt32 {
+func gradientRGB(_ M: UInt32, _ N: UInt32, _ pixFront: UInt32, _ pixBack: UInt32) -> UInt32 {
     assert(0 < M && M < N && N <= 1000, "")
     
-    func calcColor(colFront: CUnsignedChar, _ colBack: CUnsignedChar) -> CUnsignedChar {
+    func calcColor(_ colFront: CUnsignedChar, _ colBack: CUnsignedChar) -> CUnsignedChar {
         return CUnsignedChar((UInt32(colFront) * M + UInt32(colBack) * (N - M)) / N);
     }
     return makePixel(

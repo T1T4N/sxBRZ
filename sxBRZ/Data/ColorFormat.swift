@@ -8,6 +8,6 @@
 import Foundation
 
 enum ColorFormat {
-    case RGB
-    case ARGB
+    case rgb
+    case argb
 }
