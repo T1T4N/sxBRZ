@@ -87,20 +87,20 @@ func preProcessCorners(_ colorDistance:ColorDistance.Type, _ ker:Kernel_4x4, _ c
     {
         let dominantGradient:Bool = cfg.dominantDirectionThreshold * jg < fk
         if ker.f != ker.g && ker.f != ker.j {
-            result.blend_f = dominantGradient ? BlendType.dominant : BlendType.normal
+            result.blendF = dominantGradient ? BlendType.dominant : BlendType.normal
         }
         if ker.k != ker.j && ker.k != ker.g {
-            result.blend_k = dominantGradient ? BlendType.dominant : BlendType.normal
+            result.blendK = dominantGradient ? BlendType.dominant : BlendType.normal
         }
     }
     else if fk < jg
     {
         let dominantGradient:Bool = cfg.dominantDirectionThreshold * fk < jg
         if ker.j != ker.f && ker.j != ker.k {
-            result.blend_j = dominantGradient ? BlendType.dominant : BlendType.normal
+            result.blendJ = dominantGradient ? BlendType.dominant : BlendType.normal
         }
         if ker.g != ker.f && ker.g != ker.k {
-            result.blend_g = dominantGradient ? BlendType.dominant : BlendType.normal
+            result.blendG = dominantGradient ? BlendType.dominant : BlendType.normal
         }
     }
     return result
@@ -503,9 +503,9 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcP
              | J | K |
              ---------
              */
-            setTopR(&preProcBuffer, x, res.blend_j)
+            setTopR(&preProcBuffer, x, res.blendJ)
             if x+1 < bufferSize {
-                setTopL(&preProcBuffer, x+1, res.blend_k)
+                setTopL(&preProcBuffer, x+1, res.blendK)
             }
         }
     }
@@ -556,17 +556,17 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ srcP
              */
 
             blend_xy[0] = preProcBuffer[x]
-            setBottomR(&blend_xy, 0, res.blend_f) //all four corners of (x, y) have been determined at this point due to processing sequence!
+            setBottomR(&blend_xy, 0, res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
 
-            setTopR(&blend_xy1, 0, res.blend_j) //set 2nd known corner for (x, y + 1)
+            setTopR(&blend_xy1, 0, res.blendJ) //set 2nd known corner for (x, y + 1)
             preProcBuffer[x] = blend_xy1[0] //store on current buffer position for use on next row
             
             blend_xy1[0] = 0
-            setTopL(&blend_xy1, 0, res.blend_k) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
+            setTopL(&blend_xy1, 0, res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
 
             if (x + 1 < bufferSize) {
                 //set 3rd known corner for (x + 1, y)
-                setBottomL(&preProcBuffer, x + 1, res.blend_g)
+                setBottomL(&preProcBuffer, x + 1, res.blendG)
             }
             
             // fill block of size scale * scale with the given color
@@ -662,9 +662,9 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ src:
              | J | K |
              ---------
              */
-            setTopR(&preProcBuffer[x], res.blend_j)
+            setTopR(&preProcBuffer[x], res.blendJ)
             if x+1 < bufferSize {
-                setTopL(&preProcBuffer[x+1], res.blend_k)
+                setTopL(&preProcBuffer[x+1], res.blendK)
             }
         }
     }
@@ -715,17 +715,17 @@ func scaleImage(_ scaler:Scaler.Type, _ colorDistance:ColorDistance.Type, _ src:
              */
             
             blend_xy = preProcBuffer[x]
-            setBottomR(&blend_xy, res.blend_f) //all four corners of (x, y) have been determined at this point due to processing sequence!
+            setBottomR(&blend_xy, res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
             
-            setTopR(&blend_xy1, res.blend_j) //set 2nd known corner for (x, y + 1)
+            setTopR(&blend_xy1, res.blendJ) //set 2nd known corner for (x, y + 1)
             preProcBuffer[x] = blend_xy1 //store on current buffer position for use on next row
             
             blend_xy1 = 0
-            setTopL(&blend_xy1, res.blend_k) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
+            setTopL(&blend_xy1, res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
             
             if (x + 1 < bufferSize) {
                 //set 3rd known corner for (x + 1, y)
-                setBottomL(&preProcBuffer[x + 1], res.blend_g)
+                setBottomL(&preProcBuffer[x + 1], res.blendG)
             }
             
             // fill block of size scale * scale with the given color
