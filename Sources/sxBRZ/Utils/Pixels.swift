@@ -66,3 +66,18 @@ extension RawPixel {
     public var green: RawPixelColor { return getGreen(self) }
     public var blue: RawPixelColor { return getBlue(self) }
 }
+
+extension RawPixelColor {
+    func rotateBlendInfo(_ rotDeg: RotationDegree) -> RawPixelColor {
+        switch rotDeg {
+        case .zero:
+            return self
+        case .rot90:
+            return ((self << 2) | (self >> 6)) & 0xff
+        case .rot180:
+            return ((self << 4) | (self >> 4)) & 0xff
+        case .rot270:
+            return ((self << 6) | (self >> 2)) & 0xff
+        }
+    }
+}

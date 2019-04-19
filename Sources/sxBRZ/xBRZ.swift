@@ -85,19 +85,6 @@ func preProcessCorners(_ colorDistance: ColorDistance,
     return result
 }
 
-func rotateBlendInfo(_ rotDeg: RotationDegree, _ b: RawPixelColor) -> RawPixelColor {
-    switch rotDeg {
-    case .zero:
-        return b
-    case .rot90:
-        return ((b << 2) | (b >> 6)) & 0xff
-    case .rot180:
-        return ((b << 4) | (b >> 4)) & 0xff
-    case .rot270:
-        return ((b << 6) | (b >> 2)) & 0xff
-    }
-}
-
 #if DEBUG
 let breakIntoDebugger = false
 #endif
@@ -110,7 +97,7 @@ func blendPixel(_ scaler: Scaler,
                 _ trgWidth: Int,
                 _ blendInfo: CUnsignedChar,
                 _ cfg: ScalerCfg) {
-    var blend = rotateBlendInfo(rotDeg, blendInfo)
+    let blend = blendInfo.rotateBlendInfo(rotDeg)
     if blend.bottomR.rawValue >= BlendType.normal.rawValue {
         func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
             return colorDistance.dist(pix1, pix2, cfg.luminanceWeight) < cfg.equalColorTolerance
@@ -189,21 +176,21 @@ func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
                 _ ker: Kernel3x3,
-                _ target: inout [UInt32],
+                _ target: inout [RawPixel],
                 _ currentOffset: Int,
                 _ trgWidth: Int,
                 _ blendInfo: CUnsignedChar,
                 _ cfg: ScalerCfg) {
-    var blend = rotateBlendInfo(rotDeg, blendInfo)
+    let blend = blendInfo.rotateBlendInfo(rotDeg)
     if blend.bottomR.rawValue >= BlendType.normal.rawValue {
-        func eq(_ pix1:UInt32, _ pix2:UInt32) -> Bool {
+        func eq(_ pix1: RawPixel, _ pix2: RawPixel) -> Bool {
             return colorDistance.dist(pix1, pix2, cfg.luminanceWeight) < cfg.equalColorTolerance
         }
-        func dist(_ pix1:UInt32, _ pix2:UInt32) -> Double {
+        func dist(_ pix1: RawPixel, _ pix2: RawPixel) -> Double {
             return colorDistance.dist(pix1, pix2, cfg.luminanceWeight)
         }
         
-        let doLineBlend:Bool =  {
+        let doLineBlend: Bool = {
             if blend.bottomR.rawValue >= BlendType.dominant.rawValue {
                 return true
             }
@@ -267,8 +254,8 @@ func blendPixel(_ scaler: Scaler,
 
 func scaleImage(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
-                _ srcPt: UnsafeMutablePointer<UInt32>,
-                _ trgPt: inout UnsafeMutablePointer<UInt32>,
+                _ src: UnsafeMutablePointer<RawPixel>,
+                _ trg: inout UnsafeMutablePointer<RawPixel>,
                 _ srcWidth: Int, _ srcHeight: Int,
                 _ cfg: ScalerCfg,
                 _ yFirst: Int, _ yLast: Int) {
@@ -277,8 +264,6 @@ func scaleImage(_ scaler: Scaler,
     if yFirst >= yLast || srcWidth <= 0 {
         return
     }
-    let src = UnsafeMutablePointer<UInt32>(srcPt)
-    let trg = UnsafeMutablePointer<UInt32>(trgPt)
 
     let trgWidth = srcWidth * scaler.scale
     //"use" space at the end of the image as temporary buffer for "on the fly preprocessing": we even could use larger area of
