@@ -5,7 +5,7 @@
 
 import Foundation
 
-// swiftlint:disable identifier_name
+// swiftlint:disable identifier_name function_parameter_count
 
 func byteAdvance(_ ptr: UnsafeMutablePointer<RawPixel>, _ bytes: Int)
     -> UnsafeMutablePointer<RawPixel> {
@@ -122,7 +122,8 @@ func blendPixel(_ scaler: Scaler,
                 return true
             }
 
-            //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
+            //make sure there is no second blending in an adjacent rotation
+            //for this pixel: handles insular pixels, mario eyes
             if blend.topR != .none &&
                 !eq(rotDeg.getE(for: ker),
                     rotDeg.getG(for: ker)) {
@@ -217,7 +218,8 @@ func blendPixel(_ scaler: Scaler,
             if blend.bottomR.rawValue >= BlendType.dominant.rawValue {
                 return true
             }
-            //make sure there is no second blending in an adjacent rotation for this pixel: handles insular pixels, mario eyes
+            //make sure there is no second blending in an adjacent rotation
+            //for this pixel: handles insular pixels, mario eyes
             if blend.topR != .none &&
                 !eq(rotDeg.getE(for: ker),
                     rotDeg.getG(for: ker)) {
@@ -266,23 +268,23 @@ func blendPixel(_ scaler: Scaler,
             if haveShallowLine {
                 if haveSteepLine {
                     scaler.blendLineSteepAndShallow(px, OutputMatrix.ref(
-                        UInt(scaler.scale), rotDeg, target, currentOffset, trgWidth))
+                        UInt(scaler.scale), rotDeg, &target, currentOffset, trgWidth))
                 } else {
                     scaler.blendLineShallow(px, OutputMatrix.ref(
-                        UInt(scaler.scale), rotDeg, target, currentOffset, trgWidth))
+                        UInt(scaler.scale), rotDeg, &target, currentOffset, trgWidth))
                 }
             } else {
                 if haveSteepLine {
                     scaler.blendLineSteep(px, OutputMatrix.ref(
-                        UInt(scaler.scale), rotDeg, target, currentOffset, trgWidth))
+                        UInt(scaler.scale), rotDeg, &target, currentOffset, trgWidth))
                 } else {
                     scaler.blendLineDiagonal(px, OutputMatrix.ref(
-                        UInt(scaler.scale), rotDeg, target, currentOffset, trgWidth))
+                        UInt(scaler.scale), rotDeg, &target, currentOffset, trgWidth))
                 }
             }
         } else {
             scaler.blendCorner(px, OutputMatrix.ref(
-                UInt(scaler.scale), rotDeg, target, currentOffset, trgWidth))
+                UInt(scaler.scale), rotDeg, &target, currentOffset, trgWidth))
         }
     }
 }

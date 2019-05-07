@@ -8,168 +8,7 @@
 
 import Foundation
 
-func scaleImage(_ scaler: Scaler,
-                _ colorDistance: ColorDistance,
-                _ src: UnsafeMutablePointer<RawPixel>,
-                _ trg: UnsafeMutablePointer<RawPixel>,
-                _ srcWidth: Int, _ srcHeight: Int,
-                _ cfg: ScalerConfiguration,
-                _ yFirst: Int, _ yLast: Int) {
-    let yFirst = max(yFirst, 0)
-    let yLast = min(yLast, srcHeight)
-    if yFirst >= yLast || srcWidth <= 0 {
-        return
-    }
-
-    let trgWidth = srcWidth * scaler.scale
-    //"use" space at the end of the image as temporary buffer for "on the fly preprocessing": we even could use larger area of
-    //"sizeof(uint32_t) * srcWidth * (yLast - yFirst)" bytes without risk of accidental overwriting before accessing
-    let bufferSize = srcWidth
-
-    //    let trgChar = UnsafeMutablePointer<CUnsignedChar>(trg + yLast * scaler.scale * trgWidth)
-    //    let preProcBuffer:UnsafeMutablePointer<CUnsignedChar> = trgChar - bufferSize
-    var preProcBuffer = [CUnsignedChar](repeating: 0, count: bufferSize)
-
-    assert(BlendType.none.rawValue == 0, "Blend NONE is not 0")
-    //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
-    //this cannot be optimized for adjacent processing stripes; we must not allow for a memory race condition!
-    if yFirst > 0 {
-        let y = yFirst - 1
-
-        let s_m1 = src + srcWidth * max(y - 1, 0)
-        let s_0  = src + srcWidth * y
-        let s_p1 = src + srcWidth * min(y + 1, srcHeight - 1)
-        let s_p2 = src + srcWidth * min(y + 2, srcHeight - 1)
-
-        for x in 0..<srcWidth {
-            let x_m1 = max(x - 1, 0)
-            let x_p1 = min(x + 1, srcWidth - 1)
-            let x_p2 = min(x + 2, srcWidth - 1)
-
-            let ker = Kernel4x4(
-                a: s_m1[x_m1],
-                b: s_m1[x],
-                c: s_m1[x_p1],
-                d: s_m1[x_p2],
-                e: s_0[x_m1],
-                f: s_0[x],
-                g: s_0[x_p1],
-                h: s_0[x_p2],
-                i: s_p1[x_m1],
-                j: s_p1[x],
-                k: s_p1[x_p1],
-                l: s_p1[x_p2],
-                m: s_p2[x_m1],
-                n: s_p2[x],
-                o: s_p2[x_p1],
-                p: s_p2[x_p2]
-            )
-
-            let res = preProcessCorners(colorDistance, ker, cfg)
-            /*
-             preprocessing blend result:
-             ---------
-             | F | G |   //evalute corner between F, G, J, K
-             ----|---|   //input pixel is at position F
-             | J | K |
-             ---------
-             */
-            preProcBuffer[x].setTopR(blend: res.blendJ)
-            if x+1 < bufferSize {
-                preProcBuffer[x + 1].setTopL(blend: res.blendK)
-            }
-        }
-    }
-    //------------------------------------------------------------------------------------
-    for y in yFirst..<yLast {
-        var out: UnsafeMutablePointer<RawPixel> = trg + scaler.scale * y * trgWidth
-
-        let s_m1: UnsafeMutablePointer<RawPixel> = src + srcWidth * max(y - 1, 0)
-        let s_0: UnsafeMutablePointer<RawPixel>  = src + srcWidth * y
-        let s_p1: UnsafeMutablePointer<RawPixel> = src + srcWidth * min(y + 1, srcHeight - 1)
-        let s_p2: UnsafeMutablePointer<RawPixel> = src + srcWidth * min(y + 2, srcHeight - 1)
-
-        var blend_xy1 = [RawPixelColor](repeating: 0, count: 1)
-        for x in 0..<srcWidth {
-            //all those bounds checks have only insignificant impact on performance!
-            let x_m1 = max(x - 1, 0)
-            let x_p1 = min(x + 1, srcWidth - 1)
-            let x_p2 = min(x + 2, srcWidth - 1)
-
-            let ker4 = Kernel4x4(
-                a: s_m1[x_m1],
-                b: s_m1[x],
-                c: s_m1[x_p1],
-                d: s_m1[x_p2],
-                e: s_0[x_m1],
-                f: s_0[x],
-                g: s_0[x_p1],
-                h: s_0[x_p2],
-                i: s_p1[x_m1],
-                j: s_p1[x],
-                k: s_p1[x_p1],
-                l: s_p1[x_p2],
-                m: s_p2[x_m1],
-                n: s_p2[x],
-                o: s_p2[x_p1],
-                p: s_p2[x_p2]
-            )
-            //            let blend_xyPtr = UnsafeMutablePointer<CUnsignedChar>([0]) //for current (x, y) position
-            var blend_xy = [RawPixelColor](repeating: 0, count: 1)
-            let res = preProcessCorners(colorDistance, ker4, cfg) // res is identical
-            /*
-             preprocessing blend result:
-             ---------
-             | F | G |   //evalute corner between F, G, J, K
-             ----|---|   //current input pixel is at position F
-             | J | K |
-             ---------
-             */
-
-            blend_xy[0] = preProcBuffer[x]
-            blend_xy[0].setBottomR(blend: res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
-
-            blend_xy1[0].setTopR(blend: res.blendJ) //set 2nd known corner for (x, y + 1)
-            preProcBuffer[x] = blend_xy1[0] //store on current buffer position for use on next row
-
-            blend_xy1[0] = 0
-            blend_xy1[0].setTopL(blend: res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
-
-            if (x + 1 < bufferSize) {
-                //set 3rd known corner for (x + 1, y)
-                preProcBuffer[x + 1].setBottomL(blend: res.blendG)
-            }
-
-            // fill block of size scale * scale with the given color
-            fillBlock(out, trgWidth * MemoryLayout<RawPixel>.size, ker4.f, scaler.scale) //place *after* preprocessing step, to not overwrite the results while processing the the last pixel!
-            // fillBlock(out, trgWidth, ker4.f, scaler.scale)
-
-            //blend four corners of current pixel
-            if blend_xy[0].blendingNeeded { //good 5% perf-improvement
-                let ker3 = Kernel3x3(
-                    a: ker4.a,
-                    b: ker4.b,
-                    c: ker4.c,
-                    d: ker4.e,
-                    e: ker4.f,
-                    f: ker4.g,
-                    g: ker4.i,
-                    h: ker4.j,
-                    i: ker4.k
-                )
-                blendPixel(
-                    scaler, colorDistance, RotationDegree.zero, ker3, out, trgWidth, blend_xy[0], cfg)
-                blendPixel(
-                    scaler, colorDistance, RotationDegree.rot90, ker3, out, trgWidth, blend_xy[0], cfg)
-                blendPixel(
-                    scaler, colorDistance, RotationDegree.rot180, ker3, out, trgWidth, blend_xy[0], cfg)
-                blendPixel(
-                    scaler, colorDistance, RotationDegree.rot270, ker3, out, trgWidth, blend_xy[0], cfg)
-            }
-            out += scaler.scale
-        }
-    }
-}
+// swiftlint:disable identifier_name function_body_length function_parameter_count
 
 func scaleImage(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
@@ -185,13 +24,16 @@ func scaleImage(_ scaler: Scaler,
     }
 
     let trgWidth = srcWidth * scaler.scale
-    //"use" space at the end of the image as temporary buffer for "on the fly preprocessing": we even could use larger area of
-    //"sizeof(uint32_t) * srcWidth * (yLast - yFirst)" bytes without risk of accidental overwriting before accessing
+    //"use" space at the end of the image as temporary buffer
+    //for "on the fly preprocessing": we even could use larger area of
+    //"sizeof(uint32_t) * srcWidth * (yLast - yFirst)" bytes without risk
+    //of accidental overwriting before accessing
     let bufferSize = srcWidth
 
-    //    let trgChar = UnsafeMutablePointer<CUnsignedChar>(trg + yLast * scaler.scale * trgWidth)
-    //    let preProcBuffer:UnsafeMutablePointer<CUnsignedChar> = trgChar - bufferSize
-    var preProcBuffer = [RawPixelColor](repeating: 0, count: bufferSize)
+    let trgPtr = UnsafeMutableRawPointer(&trg).assumingMemoryBound(to: RawPixelColor.self)
+    let trgChar = trgPtr + yLast * scaler.scale * trgWidth
+    let preProcBuffer = trgChar - bufferSize
+    //var preProcBuffer = [RawPixelColor](repeating: 0, count: bufferSize)
 
     assert(BlendType.none.rawValue == 0, "Blend NONE is not 0")
     //initialize preprocessing buffer for first row of current stripe: detect upper left and right corner blending
@@ -277,8 +119,11 @@ func scaleImage(_ scaler: Scaler,
                 o: src[s_p2 + x_p1],
                 p: src[s_p2 + x_p2]
             )
-            //            let blend_xyPtr = UnsafeMutablePointer<CUnsignedChar>([0]) //for current (x, y) position
+
+            //for current (x, y) position
+            //let blend_xyPtr = UnsafeMutablePointer<CUnsignedChar>([0])
             var blend_xy: RawPixelColor = 0
+
             let res = preProcessCorners(colorDistance, ker4, cfg) // res is identical
             /*
              preprocessing blend result:
@@ -290,15 +135,18 @@ func scaleImage(_ scaler: Scaler,
              */
 
             blend_xy = preProcBuffer[x]
-            blend_xy.setBottomR(blend: res.blendF) //all four corners of (x, y) have been determined at this point due to processing sequence!
+            //all four corners of (x, y) have been determined at
+            //this point due to processing sequence!
+            blend_xy.setBottomR(blend: res.blendF)
 
             blend_xy1.setTopR(blend: res.blendJ) //set 2nd known corner for (x, y + 1)
             preProcBuffer[x] = blend_xy1 //store on current buffer position for use on next row
 
             blend_xy1 = 0
-            blend_xy1.setTopL(blend: res.blendK) //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
+            //set 1st known corner for (x + 1, y + 1) and buffer for use on next column
+            blend_xy1.setTopL(blend: res.blendK)
 
-            if (x + 1 < bufferSize) {
+            if x + 1 < bufferSize {
                 //set 3rd known corner for (x + 1, y)
                 preProcBuffer[x + 1].setBottomL(blend: res.blendG)
             }
@@ -325,10 +173,10 @@ func scaleImage(_ scaler: Scaler,
                     h: ker4.j,
                     i: ker4.k
                 )
-                //                these are all equal in C++ code
-                //                print(NSString(format: "%d %d %d %d | %d %d %d %d", y, x, blend_xy, blend_xy1, res.blend_f.rawValue, res.blend_g.rawValue, res.blend_j.rawValue, res.blend_k.rawValue))
-                //                print("\(ker4)")
-                //                print("\(ker3)\n")
+                //these are all equal in C++ code
+                //print(NSString(format: "%d %d %d %d | %d %d %d %d", y, x, blend_xy, blend_xy1, res.blend_f.rawValue, res.blend_g.rawValue, res.blend_j.rawValue, res.blend_k.rawValue))
+                //print("\(ker4)")
+                //print("\(ker3)\n")
 
                 blendPixel(
                     scaler, colorDistance, RotationDegree.zero, ker3, &trg, currOffset, trgWidth, blend_xy, cfg)
@@ -359,20 +207,6 @@ private let scalerInstance = cache { (key: TupleKey) -> Scaler in
     case 6: return Scaler6x(gradient: gradient)
     default: fatalError("Unsupported scaling factor")
     }
-}
-
-public func scale(_ factor: UInt,
-                  _ src: UnsafeMutablePointer<RawPixel>,
-                  _ trg: UnsafeMutablePointer<RawPixel>,
-                  _ srcWidth: Int, _ srcHeight: Int,
-                  _ colFmt: ColorFormat,
-                  _ cfg: ScalerConfiguration,
-                  _ yFirst: Int = 0, _ yLast: Int = .max) {
-    return scaleImage(scalerInstance(TupleKey(factor: factor, format: colFmt)),
-                      colFmt.distance,
-                      src, trg,
-                      srcWidth, srcHeight,
-                      cfg, yFirst, yLast)
 }
 
 public func scale(_ factor: UInt,

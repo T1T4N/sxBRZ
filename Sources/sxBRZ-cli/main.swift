@@ -47,7 +47,6 @@ let outWidth = scaleFactor * width
 let outHeight = scaleFactor * height
 
 var rawData = cgRef.pixelData()
-let rawDataPtr = UnsafeMutablePointer<RawPixel>(mutating: rawData)
 
 var outputData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * height * width)
 var outputDataPtr = UnsafeMutablePointer<RawPixel>(mutating: outputData)
@@ -57,12 +56,13 @@ var finalData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * heig
 let finalDataPtr = UnsafeMutablePointer<RawPixel>(mutating: finalData)
 
 var cfg = ScalerConfiguration()
-scale(UInt(scaleFactor), rawDataPtr, outputDataPtr, width, height, ColorFormat.argb, cfg)
+scale(UInt(scaleFactor), rawData, &outputData, width, height, ColorFormat.argb, cfg)
 //scale(UInt(scaleFactor), p_raw, &p_output, width, height, ColorFormat.ARGB, cfg)
 //xBRZC.scale(scaleFactor, source: rawpt, target: outpt, width: Int32(width), height: Int32(height), hasAlpha: true)
 
 // Convert RGBA to ARGB
 outputDataPtr.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout.size(ofValue: outputData)) { convpt in
+    // swiftlint:disable identifier_name
     for y in 0 ..< outWidth {
         for x in 0 ..< outHeight {
             let offset = 4 * (x * outWidth + y)

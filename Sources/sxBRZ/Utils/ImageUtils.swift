@@ -15,10 +15,7 @@ private func _createARGBBitmapContext(_ imageRef: CGImage) -> CGContext! {
 
     let colorSpace: CGColorSpace = CGColorSpaceCreateDeviceRGB()
 
-    let bitmapData: UnsafeMutableRawPointer? = malloc(bitmapByteCount)
-    if bitmapData == nil {
-        return nil
-    }
+    guard let bitmapData = malloc(bitmapByteCount) else { return nil }
     let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
     return CGContext(data: bitmapData,
                      width: pixelWidth, height: pixelHeight,
@@ -37,14 +34,12 @@ private func getPixelData(_ imageRef: CGImage) -> [UInt32] {
     context.clear(rect)
     context.draw(imageRef, in: rect)
 
-    guard let data: UnsafeMutableRawPointer = context.data else {
-        return []
-    }
+    guard let data = context.data else { return [] }
     defer { free(data) }
     let dataType = data.assumingMemoryBound(to: UInt8.self)
-    // let dataType = UnsafeMutablePointer<UInt8>(data)
     var ret = [UInt32](repeating: 0, count: width * height)
 
+    // swiftlint:disable identifier_name
     for y in 0 ..< width {
         for x in 0 ..< height {
             let offset = 4 * ((width * x) + y)
