@@ -9,7 +9,7 @@
 import Foundation
 
 // swiftlint:disable identifier_name
-func cache<T, U>(work: @escaping (T)->U)
+func cache<T, U>(work: @escaping (T) -> U)
     -> (T) -> U
     where T: Hashable {
         var memo = [T: U]()
