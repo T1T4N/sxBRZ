@@ -16,14 +16,17 @@ func byteAdvance(_ ptr: UnsafeMutablePointer<RawPixel>, _ bytes: Int)
 }
 
 // Fill block  with the given color
-func fillBlock(_ trgPtr: inout UnsafeMutablePointer<RawPixel>,
+func fillBlock(_ target: UnsafeMutablePointer<RawPixel>,
                _ pitch: Int, _ col: UInt32,
                _ blockWidth: Int, _ blockHeight: Int) {
+    // Black on the diagonal if `target` used directly
+    var targetPtr = UnsafeMutablePointer<UInt32>(target)
     for _ in 0..<blockHeight {
         for x in 0..<blockWidth {
-            trgPtr[x] = col
+            targetPtr[x] = col
         }
-        trgPtr = byteAdvance(trgPtr, pitch)
+        // targetPtr += pitch
+        targetPtr = byteAdvance(targetPtr, pitch)
     }
 }
 
