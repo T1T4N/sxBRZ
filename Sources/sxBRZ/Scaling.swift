@@ -11,7 +11,7 @@ import Foundation
 func scaleImage(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ src: UnsafeMutablePointer<RawPixel>,
-                _ trg: inout UnsafeMutablePointer<RawPixel>,
+                _ trg: UnsafeMutablePointer<RawPixel>,
                 _ srcWidth: Int, _ srcHeight: Int,
                 _ cfg: ScalerConfiguration,
                 _ yFirst: Int, _ yLast: Int) {
@@ -141,7 +141,7 @@ func scaleImage(_ scaler: Scaler,
             }
 
             // fill block of size scale * scale with the given color
-            fillBlock(&out, trgWidth * MemoryLayout<RawPixel>.size, ker4.f, scaler.scale) //place *after* preprocessing step, to not overwrite the results while processing the the last pixel!
+            fillBlock(out, trgWidth * MemoryLayout<RawPixel>.size, ker4.f, scaler.scale) //place *after* preprocessing step, to not overwrite the results while processing the the last pixel!
             // fillBlock(out, trgWidth, ker4.f, scaler.scale)
 
             //blend four corners of current pixel
@@ -158,13 +158,13 @@ func scaleImage(_ scaler: Scaler,
                     i: ker4.k
                 )
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.zero, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.zero, ker3, out, trgWidth, blend_xy[0], cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot90, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.rot90, ker3, out, trgWidth, blend_xy[0], cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot180, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.rot180, ker3, out, trgWidth, blend_xy[0], cfg)
                 blendPixel(
-                    scaler, colorDistance, RotationDegree.rot270, ker3, &out, trgWidth, blend_xy[0], cfg)
+                    scaler, colorDistance, RotationDegree.rot270, ker3, out, trgWidth, blend_xy[0], cfg)
             }
             out += scaler.scale
         }
@@ -363,14 +363,14 @@ private let scalerInstance = cache { (key: TupleKey) -> Scaler in
 
 public func scale(_ factor: UInt,
                   _ src: UnsafeMutablePointer<RawPixel>,
-                  _ trg: inout UnsafeMutablePointer<RawPixel>,
+                  _ trg: UnsafeMutablePointer<RawPixel>,
                   _ srcWidth: Int, _ srcHeight: Int,
                   _ colFmt: ColorFormat,
                   _ cfg: ScalerConfiguration,
                   _ yFirst: Int = 0, _ yLast: Int = .max) {
     return scaleImage(scalerInstance(TupleKey(factor: factor, format: colFmt)),
                       colFmt.distance,
-                      src, &trg,
+                      src, trg,
                       srcWidth, srcHeight,
                       cfg, yFirst, yLast)
 }

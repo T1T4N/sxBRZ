@@ -30,9 +30,9 @@ func fillBlock(_ target: UnsafeMutablePointer<RawPixel>,
     }
 }
 
-func fillBlock(_ trgPtr: inout UnsafeMutablePointer<RawPixel>,
+func fillBlock(_ trgPtr: UnsafeMutablePointer<RawPixel>,
                _ pitch: Int, _ col: UInt32, _ n: Int) {
-    fillBlock(&trgPtr, pitch, col, n, n)
+    fillBlock(trgPtr, pitch, col, n, n)
 }
 
 //func distRGB(_ pix1: UInt32, _ pix2: UInt32) -> Double {
@@ -102,7 +102,7 @@ func blendPixel(_ scaler: Scaler,
                 _ colorDistance: ColorDistance,
                 _ rotDeg: RotationDegree,
                 _ ker: Kernel3x3,
-                _ target: inout UnsafeMutablePointer<RawPixel>,
+                _ target: UnsafeMutablePointer<RawPixel>,
                 _ trgWidth: Int,
                 _ blendInfo: RawPixelColor,
                 _ cfg: ScalerConfiguration) {

@@ -57,7 +57,7 @@ var finalData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * heig
 let finalDataPtr = UnsafeMutablePointer<RawPixel>(mutating: finalData)
 
 var cfg = ScalerConfiguration()
-scale(UInt(scaleFactor), rawDataPtr, &outputDataPtr, width, height, ColorFormat.argb, cfg)
+scale(UInt(scaleFactor), rawDataPtr, outputDataPtr, width, height, ColorFormat.argb, cfg)
 //scale(UInt(scaleFactor), p_raw, &p_output, width, height, ColorFormat.ARGB, cfg)
 //xBRZC.scale(scaleFactor, source: rawpt, target: outpt, width: Int32(width), height: Int32(height), hasAlpha: true)
 

@@ -15,7 +15,7 @@ class OutputMatrix {
     let outWidth: Int
 
     init(_ N: UInt, _ rotDeg: RotationDegree,
-         _ out: inout UnsafeMutablePointer<RawPixel>, _ outWidth: Int ) {
+         _ out: UnsafeMutablePointer<RawPixel>, _ outWidth: Int ) {
         self.N = N
         self.rotDeg = rotDeg
         self.out = out
