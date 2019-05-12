@@ -46,6 +46,7 @@ let height = cgRef.height
 let outWidth = scaleFactor * width
 let outHeight = scaleFactor * height
 
+print("Getting raw pixel data")
 var rawData = cgRef.pixelData()
 
 var outputData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * height * width)
@@ -55,11 +56,18 @@ var outputDataPtr = UnsafeMutablePointer<RawPixel>(mutating: outputData)
 var finalData = [RawPixel](repeating: 0, count: scaleFactor * scaleFactor * height * width)
 let finalDataPtr = UnsafeMutablePointer<RawPixel>(mutating: finalData)
 
+print("Perform scaling")
+let start = DispatchTime.now()
 var cfg = ScalerConfiguration()
 scale(UInt(scaleFactor), rawData, &outputData, width, height, ColorFormat.argb, cfg)
 //scale(UInt(scaleFactor), p_raw, &p_output, width, height, ColorFormat.ARGB, cfg)
 //xBRZC.scale(scaleFactor, source: rawpt, target: outpt, width: Int32(width), height: Int32(height), hasAlpha: true)
+let end = DispatchTime.now()
+let diffNano = end.uptimeNanoseconds - start.uptimeNanoseconds
+let diffMilli = diffNano / 1_000_000
+print("Scaling done in: \(diffMilli) milliseconds")
 
+print("Converting output data to ARGB")
 // Convert RGBA to ARGB
 outputDataPtr.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout.size(ofValue: outputData)) { convpt in
     // swiftlint:disable identifier_name
@@ -91,6 +99,7 @@ guard let modRef = modCont?.makeImage() else {
 }
 
 let imgRep = NSBitmapImageRep(cgImage: modRef)
+print("Creating bitmap representation of output data")
 var data = imgRep.representation(using: NSBitmapImageRep.FileType.bmp, properties: [:])
 
 do {
