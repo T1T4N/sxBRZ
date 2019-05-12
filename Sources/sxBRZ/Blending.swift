@@ -17,7 +17,7 @@ func byteAdvance(_ ptr: UnsafeMutablePointer<RawPixel>, _ bytes: Int)
 
 // Fill block  with the given color
 func fillBlock(_ target: UnsafeMutablePointer<RawPixel>,
-               _ pitch: Int, _ col: UInt32,
+               _ pitch: Int, _ col: RawPixel,
                _ blockWidth: Int, _ blockHeight: Int) {
     // Black on the diagonal if `target` used directly
     var targetPtr = UnsafeMutablePointer<UInt32>(target)
@@ -31,7 +31,7 @@ func fillBlock(_ target: UnsafeMutablePointer<RawPixel>,
 }
 
 func fillBlock(_ trgPtr: UnsafeMutablePointer<RawPixel>,
-               _ pitch: Int, _ col: UInt32, _ n: Int) {
+               _ pitch: Int, _ col: RawPixel, _ n: Int) {
     fillBlock(trgPtr, pitch, col, n, n)
 }
 
@@ -62,16 +62,16 @@ func preProcessCorners(_ colorDistance: ColorDistance,
     let weight = 4
     let jg =
         dist(ker.i, ker.f) +
-        dist(ker.f, ker.c) +
-        dist(ker.n, ker.k) +
-        dist(ker.k, ker.h) +
-        Double(weight) * dist(ker.j, ker.g)
+            dist(ker.f, ker.c) +
+            dist(ker.n, ker.k) +
+            dist(ker.k, ker.h) +
+            Double(weight) * dist(ker.j, ker.g)
     let fk =
         dist(ker.e, ker.j) +
-        dist(ker.j, ker.o) +
-        dist(ker.b, ker.g) +
-        dist(ker.g, ker.l) +
-        Double(weight) * dist(ker.f, ker.k)
+            dist(ker.j, ker.o) +
+            dist(ker.b, ker.g) +
+            dist(ker.g, ker.l) +
+            Double(weight) * dist(ker.f, ker.k)
 
     //test sample: 70% of values max(jg, fk) / min(jg, fk) are between 1.1 and 3.7 with median being 1.8
     if jg < fk {
