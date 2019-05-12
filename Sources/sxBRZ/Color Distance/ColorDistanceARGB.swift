@@ -11,8 +11,8 @@ class ColorDistanceARGB: ColorDistance {
     static let instance: ColorDistance = ColorDistanceARGB()
 
     func dist(_ pix1: RawPixel, _ pix2: RawPixel, _ luminanceWeight: Double) -> Double {
-        let a1 = Double(pix1.alpha) / 255.0
-        let a2 = Double(pix2.alpha) / 255.0
+        let alpha1 = Double(pix1.alpha) / 255.0
+        let alpha2 = Double(pix2.alpha) / 255.0
         /*
          Requirements for a color distance handling alpha channel: with a1, a2 in [0, 1]
 
@@ -25,10 +25,10 @@ class ColorDistanceARGB: ColorDistance {
         //=> following code is 15% faster:
         let dist = DistYCbCrBuffer.instance.dist(pix1, pix2)
         // let dist = distYCbCr(pix1, pix2, 1.0)
-        if a1 < a2 {
-            return a1 * dist + 255 * (a2 - a1)
+        if alpha1 < alpha2 {
+            return alpha1 * dist + 255 * (alpha2 - alpha1)
         } else {
-            return a2 * dist + 255 * (a1 - a2)
+            return alpha2 * dist + 255 * (alpha1 - alpha2)
         }
         //alternative? return std::sqrt(a1 * a2 * square(DistYCbCrBuffer::dist(pix1, pix2)) + square(255 * (a1 - a2)));
     }
