@@ -11,6 +11,7 @@ import Foundation
 public typealias RawPixel = UInt32
 public typealias RawPixelColor = CUnsignedChar
 
+// swiftlint:disable identifier_name
 private func getByte(_ N: UInt32, val: RawPixel) -> RawPixelColor {
     return RawPixelColor((val >> (8 * N)) & 0xff)
 }
@@ -44,7 +45,6 @@ private func makePixel(_ a: RawPixelColor,
     return (UInt32(a) << 24) | (UInt32(r) << 16) | (UInt32(g) << 8) | UInt32(b)
 }
 
-
 extension RawPixel {
     public static func from(r: RawPixelColor,
                             g: RawPixelColor,
@@ -59,6 +59,7 @@ extension RawPixel {
         return makePixel(a, r, g, b)
     }
 }
+// swiftlint:enable identifier_name
 
 extension RawPixel {
     public var alpha: RawPixelColor { return getAlpha(self) }

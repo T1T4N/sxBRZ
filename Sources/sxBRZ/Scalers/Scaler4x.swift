@@ -7,6 +7,7 @@
 
 import Foundation
 
+// swiftlint:disable identifier_name
 struct Scaler4x: Scaler {
     let gradient: ColorGradient
     var scale: Int { return 4 }

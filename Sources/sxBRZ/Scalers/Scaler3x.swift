@@ -12,14 +12,14 @@ struct Scaler3x: Scaler {
     let gradient: ColorGradient
     var scale: Int { return 3 }
 
-    func alphaGrad(_ M: UInt32, _ N:UInt32,
+    func alphaGrad(_ M: UInt32, _ N: UInt32,
                    _ pixBack: UnsafeMutablePointer<UInt32>, _ pixFront: UInt32) {
         let pb = UnsafeMutablePointer<UInt32>(pixBack)
         gradient.alphaGrad(M, N, &pb[0], pixFront)
         // T.instance.alphaGrad(M, N, pixBack: pixBack, pixFront)
     }
 
-    func alphaGrad(_ M: UInt32, _ N:UInt32,
+    func alphaGrad(_ M: UInt32, _ N: UInt32,
                    _ pixBack: UInt32, _ pixFront: UInt32) -> UInt32 {
         return gradient.alphaGrad(M, N, pixBack, pixFront)
     }
