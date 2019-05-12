@@ -125,28 +125,28 @@ func blendPixel(_ scaler: Scaler,
             //make sure there is no second blending in an adjacent rotation
             //for this pixel: handles insular pixels, mario eyes
             if blend.topR != .none &&
-                !eq(rotDeg.getE(for: ker),
-                    rotDeg.getG(for: ker)) {
+                !eq(ker.getE(rotDeg),
+                    ker.getG(rotDeg)) {
                 return false
             }
 
             if blend.bottomL != .none &&
-                !eq(rotDeg.getE(for: ker),
-                    rotDeg.getC(for: ker)) {
+                !eq(ker.getE(rotDeg),
+                    ker.getC(rotDeg)) {
                 return false
             }
 
             //no full blending for L-shapes; blend corner only (handles "mario mushroom eyes")
-            if !eq(rotDeg.getE(for: ker),
-                   rotDeg.getI(for: ker)) &&
-                eq(rotDeg.getG(for: ker),
-                   rotDeg.getH(for: ker)) &&
-                eq(rotDeg.getH(for: ker),
-                   rotDeg.getI(for: ker)) &&
-                eq(rotDeg.getI(for: ker),
-                   rotDeg.getF(for: ker)) &&
-                eq(rotDeg.getF(for: ker),
-                   rotDeg.getC(for: ker)) {
+            if !eq(ker.getE(rotDeg),
+                   ker.getI(rotDeg)) &&
+                eq(ker.getG(rotDeg),
+                   ker.getH(rotDeg)) &&
+                eq(ker.getH(rotDeg),
+                   ker.getI(rotDeg)) &&
+                eq(ker.getI(rotDeg),
+                   ker.getF(rotDeg)) &&
+                eq(ker.getF(rotDeg),
+                   ker.getC(rotDeg)) {
                 return false
             }
             return true
@@ -154,21 +154,20 @@ func blendPixel(_ scaler: Scaler,
 
         //choose most similar color
         let px: RawPixel =
-            dist(rotDeg.getE(for: ker),
-                 rotDeg.getF(for: ker)) <= dist(rotDeg.getE(for: ker),
-                                                rotDeg.getH(for: ker)) ?
-                                                    rotDeg.getF(for: ker) : rotDeg.getH(for: ker)
+            dist(ker.getE(rotDeg), ker.getF(rotDeg)) <=
+                dist(ker.getE(rotDeg), ker.getH(rotDeg)) ?
+                    ker.getF(rotDeg) : ker.getH(rotDeg)
 
 //        var out = OutputMatrix(UInt(scaler.scale), rotDeg, &target, trgWidth)
         if doLineBlend {
-            let fg = dist(rotDeg.getF(for: ker), rotDeg.getG(for: ker))
-            let hc = dist(rotDeg.getH(for: ker), rotDeg.getC(for: ker))
+            let fg = dist(ker.getF(rotDeg), ker.getG(rotDeg))
+            let hc = dist(ker.getH(rotDeg), ker.getC(rotDeg))
             let haveShallowLine: Bool = cfg.steepDirectionThreshold * fg <= hc &&
-                rotDeg.getE(for: ker) != rotDeg.getG(for: ker) &&
-                rotDeg.getD(for: ker) != rotDeg.getG(for: ker)
+                ker.getE(rotDeg) != ker.getG(rotDeg) &&
+                ker.getD(rotDeg) != ker.getG(rotDeg)
             let haveSteepLine: Bool   = cfg.steepDirectionThreshold * hc <= fg &&
-                rotDeg.getE(for: ker) != rotDeg.getC(for: ker) &&
-                rotDeg.getB(for: ker) != rotDeg.getC(for: ker)
+                ker.getE(rotDeg) != ker.getC(rotDeg) &&
+                ker.getB(rotDeg) != ker.getC(rotDeg)
 
             if haveShallowLine {
                 if haveSteepLine {
@@ -221,27 +220,27 @@ func blendPixel(_ scaler: Scaler,
             //make sure there is no second blending in an adjacent rotation
             //for this pixel: handles insular pixels, mario eyes
             if blend.topR != .none &&
-                !eq(rotDeg.getE(for: ker),
-                    rotDeg.getG(for: ker)) {
+                !eq(ker.getE(rotDeg),
+                    ker.getG(rotDeg)) {
                 return false
             }
             if blend.bottomL != .none &&
-                !eq(rotDeg.getE(for: ker),
-                    rotDeg.getC(for: ker)) {
+                !eq(ker.getE(rotDeg),
+                    ker.getC(rotDeg)) {
                 return false
             }
 
             //no full blending for L-shapes; blend corner only (handles "mario mushroom eyes")
-            if !eq(rotDeg.getE(for: ker),
-                   rotDeg.getI(for: ker)) &&
-                eq(rotDeg.getG(for: ker),
-                   rotDeg.getH(for: ker)) &&
-                eq(rotDeg.getH(for: ker),
-                   rotDeg.getI(for: ker)) &&
-                eq(rotDeg.getI(for: ker),
-                   rotDeg.getF(for: ker)) &&
-                eq(rotDeg.getF(for: ker),
-                   rotDeg.getC(for: ker)) {
+            if !eq(ker.getE(rotDeg),
+                   ker.getI(rotDeg)) &&
+                eq(ker.getG(rotDeg),
+                   ker.getH(rotDeg)) &&
+                eq(ker.getH(rotDeg),
+                   ker.getI(rotDeg)) &&
+                eq(ker.getI(rotDeg),
+                   ker.getF(rotDeg)) &&
+                eq(ker.getF(rotDeg),
+                   ker.getC(rotDeg)) {
                 return false
             }
             return true
@@ -249,21 +248,20 @@ func blendPixel(_ scaler: Scaler,
 
         //choose most similar color
         let px: RawPixel =
-            dist(rotDeg.getE(for: ker),
-                 rotDeg.getF(for: ker)) <= dist(rotDeg.getE(for: ker),
-                                                rotDeg.getH(for: ker)) ?
-                                                    rotDeg.getF(for: ker) : rotDeg.getH(for: ker)
+            dist(ker.getE(rotDeg), ker.getF(rotDeg)) <=
+                dist(ker.getE(rotDeg), ker.getH(rotDeg)) ?
+                    ker.getF(rotDeg) : ker.getH(rotDeg)
 
         //        var out = OutputMatrix(UInt(scaler.scale), rotDeg, out: &target, currentOffset, trgWidth)
         if doLineBlend {
-            let fg = dist(rotDeg.getF(for: ker), rotDeg.getG(for: ker))
-            let hc = dist(rotDeg.getH(for: ker), rotDeg.getC(for: ker))
+            let fg = dist(ker.getF(rotDeg), ker.getG(rotDeg))
+            let hc = dist(ker.getH(rotDeg), ker.getC(rotDeg))
             let haveShallowLine = cfg.steepDirectionThreshold * fg <= hc &&
-                rotDeg.getE(for: ker) != rotDeg.getG(for: ker) &&
-                rotDeg.getD(for: ker) != rotDeg.getG(for: ker)
+                ker.getE(rotDeg) != ker.getG(rotDeg) &&
+                ker.getD(rotDeg) != ker.getG(rotDeg)
             let haveSteepLine   = cfg.steepDirectionThreshold * hc <= fg &&
-                rotDeg.getE(for: ker) != rotDeg.getC(for: ker) &&
-                rotDeg.getB(for: ker) != rotDeg.getC(for: ker)
+                ker.getE(rotDeg) != ker.getC(rotDeg) &&
+                ker.getB(rotDeg) != ker.getC(rotDeg)
 
             if haveShallowLine {
                 if haveSteepLine {
